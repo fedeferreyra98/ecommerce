@@ -1,0 +1,11 @@
+# .gitignore
+
+# Ignore the bin directory
+bin/
+
+# Ignore the obj directory
+obj/
+
+# Ignore the idea settings
+Folder.DotSettings
+/.idea/

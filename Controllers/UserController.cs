@@ -1,27 +1,31 @@
+using ecommerce.Abstractions;
 using ecommerce.Models;
 using ecommerce.Services;
 
 namespace ecommerce.Controllers;
 
-public class UserController
+public class UserController : IController<User>
 {
     private UserService _service;
 
-    public UserController()
+    public UserController(UserService service)
     {
-        _service = new UserService();
+        _service = service;
     }
 
-    public void GetById(string id)
+    public User Get(string id)
     {
-        var user = _service.GetById(id);
-        //TODO: Renderiza el usuario o lo que sea...
+        return _service.Get(id);
     }
 
     public void Save(User user)
     {
         _service.Save(user);
     }
-    
-    //TODO: Otros metodos importantes
+
+    public void Print(User entity)
+    {
+        //TODO: Renderiza el usuario o lo que sea...
+        throw new NotImplementedException();
+    }
 }

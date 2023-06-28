@@ -1,19 +1,20 @@
 using System.Text.Json;
+using ecommerce.Abstractions;
 using ecommerce.Models;
 using StackExchange.Redis;
 
 namespace ecommerce.Data;
-public class UserContext
+public class UserRepository: IRepository<User>
 {
     private IDatabase _database;
 
-    public UserContext()
+    public UserRepository()
     {
         var redis = ConnectionMultiplexer.Connect("localhost");
         _database = redis.GetDatabase();
     }
 
-    public User GetById(string id)
+    public User Get(string id)
     {
         var user = _database.StringGet(id);
         return JsonSerializer.Deserialize<User>(user);

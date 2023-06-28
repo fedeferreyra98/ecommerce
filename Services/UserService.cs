@@ -1,24 +1,25 @@
+using ecommerce.Abstractions;
 using ecommerce.Data;
 using ecommerce.Models;
 
 namespace ecommerce.Services;
 
-public class UserService
+public class UserService : IService<User>
 {
-    private UserContext _context;
+    private UserRepository _repository;
 
-    public UserService()
+    public UserService(UserRepository repository)
     {
-        _context = new UserContext();
+        _repository = repository;
     }
 
-    public User GetById(string id)
+    public User Get(string id)
     {
-        return _context.GetById(id);
+        return _repository.Get(id);
     }
 
     public void Save(User user)
     {
-        _context.Save(user);
+        _repository.Save(user);
     }
 }

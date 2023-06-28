@@ -10,7 +10,9 @@
 
 ### Introduccion <a name="introduccion"></a>
 App de e-commerce realizado como trabajo practico para la materia Ingenieria de Datos II de la facultad de Ingenieria en UADE
-Esta aplicacion busca demostrar los conocimientos obtenidos durante la cursada, los cuales consisten en las diferentes implementaciones posibles de bases dedatos SQL y NoSQL
+
+Esta aplicacion busca demostrar los conocimientos obtenidos durante la cursada, los cuales consisten en las diferentes implementaciones posibles de base de datos SQL y NoSQL
+
 Las utilizadas en este caso son Redis, MongoDb y Microsoft SQL Server
 
 ### Objetivo <a name="objetivo"></a>

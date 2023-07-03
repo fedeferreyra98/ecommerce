@@ -10,7 +10,9 @@
 
 ### Introduccion <a name="introduccion"></a>
 App de e-commerce realizado como trabajo practico para la materia Ingenieria de Datos II de la facultad de Ingenieria en UADE
-Esta aplicacion busca demostrar los conocimientos obtenidos durante la cursada, los cuales consisten en las diferentes implementaciones posibles de bases dedatos SQL y NoSQL
+
+Esta aplicacion busca demostrar los conocimientos obtenidos durante la cursada, los cuales consisten en las diferentes implementaciones posibles de base de datos SQL y NoSQL
+
 Las utilizadas en este caso son Redis, MongoDb y Microsoft SQL Server
 
 ### Objetivo <a name="objetivo"></a>
@@ -50,17 +52,19 @@ Vamos a repasar (_de la mano de chatgpt_) las estructuras y los patrones de dise
 
    - **Controlador (Controller)**: Maneja la interacción del usuario, trabajando con el modelo y la vista. En nuestro caso, `Controller` es el directorio donde estan las clases encargadas de esto.
 
-2. **Patrón Repositorio (Repository)**: Este patrón se usa para abstraer el acceso a los datos, de tal manera que se pueda cambiar la fuente de datos sin modificar la lógica de negocio. En nuestro caso, las clases `Context` serían nuestro repositorio.
+2. **Patrón Repositorio (Repository)**: Este patrón se usa para abstraer el acceso a los datos, de tal manera que se pueda cambiar la fuente de datos sin modificar la lógica de negocio. En nuestro caso, las clases `Repository` serían nuestro repositorio.
 
-3. **Inyección de Dependencias (Dependency Injection)**: Este patrón se usa para reducir el acoplamiento entre clases y mover la responsabilidad de manejar las dependencias hacia el contenedor. En nuestro caso, `Service` depende de `Context`. En un escenario real, podrías usar un contenedor de inyección de dependencias para inyectar esta dependencia en tiempo de ejecución.
+3. **Inyección de Dependencias (Dependency Injection)**: Este patrón se usa para reducir el acoplamiento entre clases y mover la responsabilidad de manejar las dependencias hacia el contenedor. En nuestro caso, `Service` depende de `Repository`. En un escenario real, podrías usar un contenedor de inyección de dependencias para inyectar esta dependencia en tiempo de ejecución.
 
-4. **Patrón Singleton**: Este patrón restringe la instanciación de una clase a un único objeto. En nuestro caso, se podría utilizar para la conexión a Redis en `Context`, garantizando que solo existe una única conexión a Redis en toda la aplicación.
+4. **Patrón Singleton**: Este patrón restringe la instanciación de una clase a un único objeto. En nuestro caso, se podría utilizar para la conexión a Redis/MongoDb/Sql en `EntidadCualquieraRepository`, garantizando que solo existe una única conexión a Redis en toda la aplicación.
 
 Cada uno de estos patrones se aplica para resolver problemas específicos de diseño y estructura en el desarrollo de software, permitiendo que el código sea más reutilizable, mantenible y fácil de entender.
 
 ### Utilidades <a name="utilidades"></a>
 
-
 - [Curso Git en 15 minutos](https://www.youtube.com/watch?v=vlCXdvcgiE0) (para usar via consola)
 - [Curso Github Desktop ](https://www.youtube.com/watch?v=UISDyE9KMlI)
 - [Curso Completo de Git](https://www.youtube.com/watch?v=HiXLkL42tMU)
+- [Que es MVC?](https://www.youtube.com/watch?v=m1shPjV-98U)
+- [Código más Limpio con el Patrón MVC y Service Layer](https://www.youtube.com/watch?v=9-TvHe-hHeY)
+- [Curso .Net Core](https://www.youtube.com/watch?v=ss61x5HLBYo&list=PLLJJqiFt6VPrSzPakVEy1_WpwqcWD1vAc)

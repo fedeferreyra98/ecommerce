@@ -1,0 +1,153 @@
+using Cassandra;
+using ecommerce.Cart.Core.Dtos;
+using ecommerce.Commerce.Core.Repositories.Contexts.Interfaces;
+using StackExchange.Redis;
+
+namespace ecommerce.Cart.Core.Repositories;
+
+public class UserCartRepository 
+{
+    private readonly IConnection<IDatabase> _redisConnection;
+        private readonly IConnection<ISession> _cassandraConnection;
+
+        public UserCartRepository(IConnection<IDatabase> redisConnection, IConnection<ISession> cassandraConnection)
+        {
+            _redisConnection = redisConnection;
+            _cassandraConnection = cassandraConnection;
+        }
+
+        public async Task ChangeUserCartAsync(UserCartDTO info)
+        {
+            var processId = Guid.NewGuid();
+            var userId = info.User.UserId;
+
+            await _redisConnection.GetConnection()
+                .HashSetAsync($"user:{userId}", info.User.ToHashEntries());
+
+            var userProductsId = await _redisConnection.GetConnection()
+                .SetMembersAsync($"userCart:{userId}");
+
+            foreach(var product in userProductsId.Where(p => !info.Products.Any(pr => pr.ProductCatalogId.ToString() == p.ToString())))
+            {
+                await _redisConnection.GetConnection()
+                    .SetRemoveAsync($"userCart:{userId}", product);
+            }
+
+            foreach (var product in info.Products)
+            {
+                var productKey = $"userCart:{userId}:{product.ProductCatalogId}";
+                await _redisConnection.GetConnection()
+                    .HashSetAsync(productKey, product.ToHashEntries());
+
+                var query = await _cassandraConnection.GetConnection()
+                    .PrepareAsync(@"INSERT INTO cart (id, moment, userId, imageurl, price, productcatalogid, productname, quantity) 
+                                    VALUES (?,?,?,?,?,?,?,?)");
+
+                _cassandraConnection.GetConnection()
+                    .Execute(query.Bind(processId, DateTime.Now, info.User.UserId, product.ImageURL, product.Price, 
+                        product.ProductCatalogId, product.ProductName, product.Quantity));
+
+                await _redisConnection.GetConnection()
+                .SetAddAsync($"userCart:{userId}", new RedisValue(product.ProductCatalogId.ToString()));
+            }
+        }
+
+        public async Task<UserCartDTO?> GetUserCartAsync(Guid userId)
+        {
+            var result = new UserCartDTO();
+
+            var userInfo = await _redisConnection.GetConnection()
+                .HashGetAllAsync($"user:{userId}");
+
+            if (userInfo.Length == 0)
+               return null;
+
+            result.AddUserData(userId, userInfo);
+
+            var userProductsId = await _redisConnection.GetConnection()
+                .SetMembersAsync($"userCart:{userId}");
+
+            foreach (var productCartId in userProductsId)
+            {
+                var productInfo = await _redisConnection.GetConnection()
+                    .HashGetAllAsync($"userCart:{userId}:{productCartId}");
+
+                result.AddProductData(Guid.Parse(productCartId.ToString()), productInfo);
+            }
+          
+            return result;
+        }
+
+        public async Task<List<UserActivityDTO>> GetUserActivityAsync(Guid userId)
+        {
+            var result = new List<UserActivityDTO>();
+
+            var query = await _cassandraConnection.GetConnection()
+                .PrepareAsync("SELECT * FROM cart WHERE userId = ?");
+
+            var queryResult = _cassandraConnection.GetConnection()
+                   .Execute(query.Bind(userId));
+
+            foreach(var row in queryResult)
+            {
+                result.Add(new UserActivityDTO(row));
+            }
+
+            return result;
+        }
+
+        public async Task RestoreCart(Guid userId, Guid logId)
+        {
+            var processId = Guid.NewGuid();
+            var productsCatalogId = new List<string>();
+
+            var query = _cassandraConnection.GetConnection()
+                .Execute(@$"SELECT * FROM cart
+                            WHERE id = {logId}");
+
+            foreach (var row in query)
+            {
+                var product = new ProductCartDTO(row);
+                productsCatalogId.Add(product.ProductCatalogId.ToString());
+
+                var productKey = $"userCart:{userId}:{product.ProductCatalogId}";
+                await _redisConnection.GetConnection()
+                    .HashSetAsync(productKey, product.ToHashEntries());
+
+                await _redisConnection.GetConnection()
+                    .SetAddAsync($"userCart:{userId}", new RedisValue(product.ProductCatalogId.ToString()));
+
+                var addQuery = await _cassandraConnection.GetConnection()
+                    .PrepareAsync(@"INSERT INTO cart (id, moment, userId, imageurl, price, productcatalogid, productname, quantity) 
+                                        VALUES (?,?,?,?,?,?,?,?)");
+
+                _cassandraConnection.GetConnection()
+                    .Execute(addQuery.Bind(processId, DateTime.Now, userId, product.ImageURL, product.Price,
+                        product.ProductCatalogId, product.ProductName, product.Quantity));
+            }
+
+            var userProductsId = await _redisConnection.GetConnection()
+                .SetMembersAsync($"userCart:{userId}");
+
+            foreach (var product in userProductsId.Where(id => !productsCatalogId.Contains(id.ToString())))
+            {
+                await _redisConnection.GetConnection()
+                    .SetRemoveAsync($"userCart:{userId}", product);
+            }
+        }
+
+        public async Task EmptyCart(Guid userId)
+        {
+            var userProductsId = await _redisConnection.GetConnection()
+                .SetMembersAsync($"userCart:{userId}");
+
+            if (userProductsId == null)
+                throw new Exception("Cart is empty");
+            
+            foreach (var product in userProductsId)
+            {
+                await _redisConnection.GetConnection()
+                    .SetRemoveAsync($"userCart:{userId}", product);
+            }
+        }
+}

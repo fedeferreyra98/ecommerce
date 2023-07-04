@@ -1,0 +1,25 @@
+﻿using Cassandra;
+using ecommerce.Cart.Core.Repositories.Context.Interfaces;
+
+namespace ecommerce.Cart.Core.Repositories.Context;
+
+public class CassandraDataContext : IConnection<ISession>
+{
+    private ISession _session;
+
+    public CassandraDataContext(IConfiguration configuration)
+    {
+        _session = Cluster.Builder()
+            .WithCloudSecureConnectionBundle(@"C: \Users\gonza\Documents\Programacion\secure - connect - e - commerce - bd2.zip")
+            .WithCredentials(configuration.GetValue<string>("Databases:Cassandra:ClientID"), configuration.GetValue<string>("Databases:Cassandra:ClientSecret"))
+            .Build()
+            .Connect();
+
+        _session.ChangeKeyspace(configuration.GetValue<string>("Databases:Cassandra:KeySpace"));
+    }
+
+    public ISession GetConnection()
+    {
+        return _session;
+    }
+}

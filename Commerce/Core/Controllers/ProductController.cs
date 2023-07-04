@@ -1,4 +1,3 @@
-using ecommerce.Abstractions;
 using ecommerce.Commerce.Core.DTOs;
 using ecommerce.Commerce.Core.Services.Interfaces;
 using ecommerce.Models;

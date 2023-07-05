@@ -1,7 +1,8 @@
-﻿using ecommerce.Cart.Core.Repositories.Context.Interfaces;
+﻿using ecommerce.DatabaseContext.Context.Interface;
+using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
 
-namespace ecommerce.Cart.Core.Repositories.Context;
+namespace ecommerce.DatabaseContext.Context;
 
 public class RedisDataContext : IConnection<IDatabase>
 {

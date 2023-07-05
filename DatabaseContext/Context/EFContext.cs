@@ -1,7 +1,7 @@
 using ecommerce.Commerce.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace ecommerce.Commerce.Core.Repositories.Contexts;
+namespace ecommerce.DatabaseContext.Context;
 
 public class EfContext : DbContext
 {

@@ -1,6 +1,6 @@
 using ecommerce.Commerce.Core.Models;
-using ecommerce.Commerce.Core.Repositories.Contexts.Interfaces;
 using ecommerce.Commerce.Core.Repositories.Interfaces;
+using ecommerce.DatabaseContext.Context.Interface;
 using MongoDB.Bson;
 using MongoDB.Driver;
 

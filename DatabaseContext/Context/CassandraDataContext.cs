@@ -1,8 +1,9 @@
 using Cassandra;
 using Cassandra.Mapping;
-using ecommerce.Commerce.Core.Repositories.Contexts.Interfaces;
+using ecommerce.DatabaseContext.Context.Interface;
+using Microsoft.Extensions.Configuration;
 
-namespace ecommerce.Commerce.Core.Repositories.Contexts;
+namespace ecommerce.DatabaseContext.Context;
 
 public class CassandraDataContext : Mappings, IConnection<ISession>
 {

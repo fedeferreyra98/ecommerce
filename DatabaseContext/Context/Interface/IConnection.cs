@@ -1,4 +1,4 @@
-namespace ecommerce.Commerce.Core.Repositories.Contexts.Interfaces;
+namespace ecommerce.DatabaseContext.Context.Interface;
 
 public interface IConnection<T> where T: class
 {

@@ -1,11 +1,11 @@
 using ecommerce.Commerce.Core.DTOs;
 using ecommerce.Commerce.Core.Models;
-using ecommerce.Commerce.Core.Repositories.Contexts;
 using ecommerce.Commerce.Core.Repositories.Interfaces;
+using ecommerce.DatabaseContext.Context;
 using Microsoft.EntityFrameworkCore;
 
 namespace ecommerce.Commerce.Core.Repositories;
-public abstract class UserRepository: IUserRepository
+public class UserRepository: IUserRepository
 {
     private readonly EfContext _dbContext;
 

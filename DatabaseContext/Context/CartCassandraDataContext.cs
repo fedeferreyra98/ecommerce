@@ -1,13 +1,14 @@
 ﻿using Cassandra;
-using ecommerce.Cart.Core.Repositories.Context.Interfaces;
+using ecommerce.DatabaseContext.Context.Interface;
+using Microsoft.Extensions.Configuration;
 
-namespace ecommerce.Cart.Core.Repositories.Context;
+namespace ecommerce.DatabaseContext.Context;
 
-public class CassandraDataContext : IConnection<ISession>
+public class CartCassandraDataContext : IConnection<ISession>
 {
     private ISession _session;
 
-    public CassandraDataContext(IConfiguration configuration)
+    public CartCassandraDataContext(IConfiguration configuration)
     {
         _session = Cluster.Builder()
             .WithCloudSecureConnectionBundle(@"C: \Users\gonza\Documents\Programacion\secure - connect - e - commerce - bd2.zip")

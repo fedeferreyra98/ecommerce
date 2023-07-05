@@ -1,8 +1,10 @@
+using ecommerce.DatabaseContext.Context.Interface;
+using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 
-namespace ecommerce.Commerce.Core.Repositories.Contexts;
+namespace ecommerce.DatabaseContext.Context;
 
-public class MongoDataContext
+public class MongoDataContext : IConnection<IMongoDatabase>
 {
     private MongoClient _client;
 

@@ -1,4 +1,4 @@
-﻿namespace ecommerce.Cart.Core.Repositories.Context.Interfaces
+﻿namespace ecommerce.DatabaseContext.Context.Interfaces
 {
     public interface IConnection<T> where T : class
     {

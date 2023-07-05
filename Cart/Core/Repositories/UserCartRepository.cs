@@ -1,11 +1,12 @@
 using Cassandra;
 using ecommerce.Cart.Core.Dtos;
-using ecommerce.Commerce.Core.Repositories.Contexts.Interfaces;
+using ecommerce.Cart.Core.Repositories.Interfaces;
+using ecommerce.DatabaseContext.Context.Interface;
 using StackExchange.Redis;
 
 namespace ecommerce.Cart.Core.Repositories;
 
-public class UserCartRepository 
+public class UserCartRepository : IUserCartRepository
 {
     private readonly IConnection<IDatabase> _redisConnection;
         private readonly IConnection<ISession> _cassandraConnection;

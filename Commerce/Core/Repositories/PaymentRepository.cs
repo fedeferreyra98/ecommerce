@@ -11,7 +11,7 @@ public class PaymentRepository : IPaymentRepository
 {
     private readonly EfContext _dbContext;
 
-    public PaymentRepository(IConnection<IMongoDatabase> mongoConnection, EfContext dbContext)
+    public PaymentRepository(EfContext dbContext)
     {
         _dbContext = dbContext;
     }
@@ -28,5 +28,6 @@ public class PaymentRepository : IPaymentRepository
     public async Task Insert(Payment newPayment)
     {
         await _dbContext.Payment.AddAsync(newPayment);
+        await _dbContext.SaveChangesAsync();
     }
 }

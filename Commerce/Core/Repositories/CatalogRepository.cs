@@ -34,9 +34,9 @@ public class CatalogRepository : ICatalogRepository
             .Find(filter).SingleAsync();
     }
 
-    public async Task<List<ProductCatalog>> GetLogByProductId(Guid id)
+    public async Task<List<ProductCatalog>> GetLogByProductId(Guid productId)
     {
-        var query = _cassandraConnection.GetConnection().Execute($@"SELECT * FROM catalog WHERE productId = {id}");
+        var query = _cassandraConnection.GetConnection().Execute($@"SELECT * FROM catalog WHERE productId = {productId}");
 
         var log = query.Select(row => new ProductCatalog(row)).ToList();
 

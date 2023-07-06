@@ -8,7 +8,7 @@ public interface ICatalogRepository
 
     Task<ProductCatalog> GetProductById(Guid id);
 
-    Task<List<ProductCatalog>> GetLogByProductId(Guid id);
+    Task<List<ProductCatalog>> GetLogByProductId(Guid productId);
 
     Task Insert(ProductCatalog catalog);
 

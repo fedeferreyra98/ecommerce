@@ -6,9 +6,9 @@ namespace ecommerce.Commerce.Core.Controllers;
 
 public class UserController
 {
-    private readonly IUserService _userService;
+    private readonly IUserService? _userService;
 
-    public UserController(IUserService userService)
+    public UserController(IUserService? userService)
     {
         _userService = userService;
     }

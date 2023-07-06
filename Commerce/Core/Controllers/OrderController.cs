@@ -6,9 +6,9 @@ namespace ecommerce.Commerce.Core.Controllers;
 
 public class OrderController
 {
-    private readonly IOrderService _orderService;
+    private readonly IOrderService? _orderService;
 
-    public OrderController(IOrderService orderService)
+    public OrderController(IOrderService? orderService)
     {
         _orderService = orderService;
     }

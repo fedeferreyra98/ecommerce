@@ -9,7 +9,7 @@ public interface ICatalogService
 
     Task<ProductCatalog> GetProductCatalogById(Guid id);
 
-    Task<List<ProductCatalog>> GetProductCatalogLogById(Guid id);
+    Task<List<ProductCatalog>> GetProductCatalogLogById(Guid productId);
 
     Task InsertProductCatalog(ProductCatalogDTO catalogDto);
 

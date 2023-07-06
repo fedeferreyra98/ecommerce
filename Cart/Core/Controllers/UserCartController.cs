@@ -1,22 +1,20 @@
-using System.Runtime.CompilerServices;
 using ecommerce.Cart.Core.Dtos;
 using ecommerce.Cart.Core.Services.Interfaces;
-using ecommerce.Commerce.Core.Models;
 
 namespace ecommerce.Cart.Core.Controllers;
 
 public class UserCartController
 {
-    private readonly IUserCartService _userCartService;
+    private readonly IUserCartService? _userCartService;
 
-    public UserCartController(IUserCartService userCartService)
+    public UserCartController(IUserCartService? userCartService)
     {
         _userCartService = userCartService;
     }
 
-    public async Task<UserCartDTO?> GetUserCart(Guid id)
+    public async Task<UserCartDTO?> GetUserCart(Guid userId)
     {
-        return await _userCartService.GetUserCartAsync(id);
+        return await _userCartService.GetUserCartAsync(userId);
     }
 
     public async Task<List<UserActivityDTO>> GetUserActivity(Guid userId)

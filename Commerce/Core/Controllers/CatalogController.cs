@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using ecommerce.Commerce.Core.DTOs;
 using ecommerce.Commerce.Core.Models;
 using ecommerce.Commerce.Core.Services.Interfaces;
@@ -6,9 +7,9 @@ namespace ecommerce.Commerce.Core.Controllers;
 
 public class CatalogController
 {
-    private readonly ICatalogService _catalogService;
+    private readonly ICatalogService? _catalogService;
 
-    public CatalogController(ICatalogService catalogService)
+    public CatalogController(ICatalogService? catalogService)
     {
         _catalogService = catalogService;
     }
@@ -23,9 +24,9 @@ public class CatalogController
         return await _catalogService.GetProductCatalogById(id);
     }
 
-    public async Task<List<ProductCatalog>> GetCatalogLogById(Guid id)
+    public async Task<List<ProductCatalog>> GetCatalogLogById(Guid productId)
     {
-        return await _catalogService.GetProductCatalogLogById(id);
+        return await _catalogService.GetProductCatalogLogById(productId);
     }
 
     public async void InsertProductCatalog(ProductCatalogDTO productCatalogDto)
@@ -46,5 +47,4 @@ public class CatalogController
     {
         await _catalogService.DeleteProductCatalog(id);
     }
-    
 }

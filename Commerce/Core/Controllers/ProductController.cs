@@ -6,9 +6,9 @@ namespace ecommerce.Commerce.Core.Controllers;
 
 public class ProductController
 {
-    private readonly IProductService _service;
+    private readonly IProductService? _service;
 
-    public ProductController(IProductService service)
+    public ProductController(IProductService? service)
     {
         _service = service;
     }
@@ -22,19 +22,9 @@ public class ProductController
         return await _service.GetAllProducts();
     }
 
-    public async void Create(Product product)
+    public async void Create(ProductDTO productDto)
     {
-        var dto = new ProductDTO()
-        {
-            ProductName = product.ProductName,
-            Comments = product.Comments,
-            Description = product.Description,
-            ImagesURL = product.ImagesURL,
-            MainImage = product.MainImage,
-            Stock = product.Stock
-        };
-        
-        await _service.InsertProduct(dto);
+        await _service.InsertProduct(productDto);
     }
 
     public async void Update(Product product)

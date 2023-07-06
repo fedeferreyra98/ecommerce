@@ -9,5 +9,6 @@ public class EfContext : DbContext
     {
     }
     public DbSet<User> User { get; set; }
+    public DbSet<Payment> Payment { get; set; }
 
 }

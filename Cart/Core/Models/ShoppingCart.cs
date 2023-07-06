@@ -1,4 +1,4 @@
-namespace ecommerce.Models;
+namespace ecommerce.Cart.Core.Models;
 
 public class ShoppingCart
 {

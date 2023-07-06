@@ -5,9 +5,9 @@ namespace ecommerce.Commerce.Core.Controllers;
 
 public class PaymentController
 {
-    private readonly IPaymentService _paymentService;
+    private readonly IPaymentService? _paymentService;
 
-    public PaymentController(IPaymentService paymentService)
+    public PaymentController(IPaymentService? paymentService)
     {
         _paymentService = paymentService;
     }

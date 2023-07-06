@@ -8,8 +8,6 @@ public class UserCartDTO
 
     public List<ProductCartDTO> Products { get; set; } = new List<ProductCartDTO>();
 
-    public UserCartDTO() { }
-
     public void AddUserData(Guid id, HashEntry[] entries)
     {
         User = new UserDTO();

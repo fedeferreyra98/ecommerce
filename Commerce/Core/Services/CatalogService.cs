@@ -23,9 +23,9 @@ public class CatalogService : ICatalogService
         return await _catalogRepository.GetProductById(id);
     }
 
-    public async Task<List<ProductCatalog>> GetProductCatalogLogById(Guid id)
+    public async Task<List<ProductCatalog>> GetProductCatalogLogById(Guid productId)
     {
-        return await _catalogRepository.GetLogByProductId(id);
+        return await _catalogRepository.GetLogByProductId(productId);
     }
 
     public async Task InsertProductCatalog(ProductCatalogDTO catalogDto)
@@ -56,16 +56,5 @@ public class CatalogService : ICatalogService
     {
         await GetProductCatalogById(id);
         await _catalogRepository.Delete(id);
-    }
-
-    public void Print(ProductCatalog productCatalog)
-    {
-        Console.WriteLine();
-        Console.WriteLine("Log del catalogo:");
-        Console.WriteLine($"Id del producto: {productCatalog.ProductId}");
-        Console.WriteLine($"Id del autor: {productCatalog.AuthorId}");
-        Console.WriteLine($"Fecha: {productCatalog.Moment}");
-        Console.WriteLine($"Precio: {productCatalog.Price}");
-        Console.WriteLine();
     }
 }

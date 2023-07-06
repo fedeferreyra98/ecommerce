@@ -28,7 +28,7 @@ public class UserCartRepository : IUserCartRepository
             var userProductsId = await _redisConnection.GetConnection()
                 .SetMembersAsync($"userCart:{userId}");
 
-            foreach(var product in userProductsId.Where(p => !info.Products.Any(pr => pr.ProductCatalogId.ToString() == p.ToString())))
+            foreach(var product in userProductsId.Where(p => info.Products.All(pr => pr.ProductCatalogId.ToString() != p.ToString())))
             {
                 await _redisConnection.GetConnection()
                     .SetRemoveAsync($"userCart:{userId}", product);
@@ -81,20 +81,13 @@ public class UserCartRepository : IUserCartRepository
 
         public async Task<List<UserActivityDTO>> GetUserActivityAsync(Guid userId)
         {
-            var result = new List<UserActivityDTO>();
-
             var query = await _cassandraConnection.GetConnection()
                 .PrepareAsync("SELECT * FROM cart WHERE userId = ?");
 
             var queryResult = _cassandraConnection.GetConnection()
                    .Execute(query.Bind(userId));
 
-            foreach(var row in queryResult)
-            {
-                result.Add(new UserActivityDTO(row));
-            }
-
-            return result;
+            return queryResult.Select(row => new UserActivityDTO(row)).ToList();
         }
 
         public async Task RestoreCart(Guid userId, Guid logId)
@@ -103,8 +96,7 @@ public class UserCartRepository : IUserCartRepository
             var productsCatalogId = new List<string>();
 
             var query = _cassandraConnection.GetConnection()
-                .Execute(@$"SELECT * FROM cart
-                            WHERE id = {logId}");
+                .Execute(@$"SELECT * FROM cart WHERE id = {logId}");
 
             foreach (var row in query)
             {

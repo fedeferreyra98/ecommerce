@@ -1,40 +1,32 @@
 using ecommerce.Commerce.Core.Models;
 using ecommerce.Commerce.Core.Repositories.Interfaces;
+using ecommerce.DatabaseContext.Context;
 using ecommerce.DatabaseContext.Context.Interface;
-using MongoDB.Bson;
+using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 
 namespace ecommerce.Commerce.Core.Repositories;
 
 public class PaymentRepository : IPaymentRepository
 {
-    private readonly IConnection<IMongoDatabase> _mongoConnection;
+    private readonly EfContext _dbContext;
 
-    public PaymentRepository(IConnection<IMongoDatabase> mongoConnection)
+    public PaymentRepository(IConnection<IMongoDatabase> mongoConnection, EfContext dbContext)
     {
-        _mongoConnection = mongoConnection;
+        _dbContext = dbContext;
     }
     public async Task<List<Payment>> GetAll()
     {
-        return (await _mongoConnection.GetConnection()
-                .GetCollection<Payment>("Payments")
-                .FindAsync(new BsonDocument()))
-            .ToList();
+        return await _dbContext.Payment.ToListAsync();
     }
 
     public async Task<Payment> GetById(Guid id)
     {
-        var filter = Builders<Payment>.Filter.Eq(x => x.PaymentId, id);
-
-        return await _mongoConnection.GetConnection()
-            .GetCollection<Payment>("Payments")
-            .Find(filter).SingleAsync();
+        return await _dbContext.Payment.Where(x => x.PaymentId == id).FirstAsync();
     }
 
     public async Task Insert(Payment newPayment)
     {
-        await _mongoConnection.GetConnection()
-            .GetCollection<Payment>("Payments")
-            .InsertOneAsync(newPayment);
+        await _dbContext.Payment.AddAsync(newPayment);
     }
 }

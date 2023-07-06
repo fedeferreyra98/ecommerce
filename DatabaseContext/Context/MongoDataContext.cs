@@ -8,16 +8,16 @@ public class MongoDataContext : IConnection<IMongoDatabase>
 {
     private MongoClient _client;
 
-    private string DataBaseName;
+    private string _dataBaseName;
 
-    public MongoDataContext(IConfiguration configuration)
+    public MongoDataContext()
     {
         _client = new MongoClient("mongodb://127.0.0.1:45268");
-        DataBaseName = "ecommerceDb";
+        _dataBaseName = "ecommerceDb";
     }
 
     public IMongoDatabase GetConnection()
     {
-        return _client.GetDatabase(DataBaseName);
+        return _client.GetDatabase(_dataBaseName);
     }
 }

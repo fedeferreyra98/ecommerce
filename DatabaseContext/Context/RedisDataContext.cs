@@ -10,7 +10,7 @@ public class RedisDataContext : IConnection<IDatabase>
 
     public RedisDataContext(IConfiguration configuration)
     {
-        _connection = ConnectionMultiplexer.Connect(configuration.GetValue<string>("Databases:Redis:ConnectionString"));
+        _connection = ConnectionMultiplexer.Connect("localhost:6379");
     }
 
     public IDatabase GetConnection()

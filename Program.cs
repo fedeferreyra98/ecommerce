@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.Design;
-using System.Globalization;
-using Amazon.Runtime.Internal.Transform;
-using Cassandra;
+﻿using Cassandra;
 using ecommerce.Cart.Core.Controllers;
 using ecommerce.Cart.Core.Dtos;
 using ecommerce.Cart.Core.Repositories;
@@ -17,11 +14,12 @@ using ecommerce.Commerce.Core.Services;
 using ecommerce.Commerce.Core.Services.Interfaces;
 using ecommerce.DatabaseContext.Context;
 using ecommerce.DatabaseContext.Context.Interface;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using MongoDB.Driver;
 using StackExchange.Redis;
-using Order = ecommerce.Commerce.Core.Models.Order;
 using ProductCartDTO = ecommerce.Cart.Core.Dtos.ProductCartDTO;
 using UserDTO = ecommerce.Commerce.Core.DTOs.UserDTO;
 
@@ -32,9 +30,8 @@ public class Program
     public static void Main(string[] args)
     {
         var serviceProvider = new ServiceCollection()
-            .AddDbContext<EfContext>() //Setup databases
+            .AddDbContext<EfContext>(options => options.UseSqlServer("Server=localhost,1433;Database=Ecommerce;User Id=sa;Password=Uade1234;")) //Setup databases
             .AddTransient<IConnection<ISession>, CassandraDataContext>()
-            .AddTransient<IConnection<ISession>, CartCassandraDataContext>()
             .AddTransient<IConnection<IMongoDatabase>,MongoDataContext>()
             .AddTransient<IConnection<IDatabase>, RedisDataContext>()
             .AddTransient<ICatalogRepository, CatalogRepository>() //setup repositories
@@ -147,8 +144,8 @@ public class Program
         Console.WriteLine("Bienvenido al ecommerce [grupo]^3");
         
         // 1. Crear los usuarios
-        // userController.Create(userOneDto); TODO: AGREGARLOS EN LA BASE SQL
-        // userController.Create(userTwoDto);
+        userController.Create(userOneDto);
+        userController.Create(userTwoDto);
         var usersRegistered = userController.GetAll().Result;
         
         Console.WriteLine();
@@ -176,12 +173,12 @@ public class Program
             Console.Write("Ingrese su clave de acceso: ");
             password = Console.ReadLine();
 
-            if (password != "password123")
+            if (password != username)
             {
                 Console.WriteLine("clave incorrecta, por favor intente nuevamente.");
             }
 
-        } while (password != "password123");
+        } while (password != username);
 
         Console.WriteLine("Usuario logueado correctamente!");
         

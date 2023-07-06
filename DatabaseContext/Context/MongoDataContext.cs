@@ -12,8 +12,8 @@ public class MongoDataContext : IConnection<IMongoDatabase>
 
     public MongoDataContext(IConfiguration configuration)
     {
-        _client = new MongoClient(configuration.GetValue<string>("Databases:Mongo:ConnectionString"));
-        DataBaseName = configuration.GetValue<string>("Databases:Mongo:Database");
+        _client = new MongoClient("mongodb://127.0.0.1:45268");
+        DataBaseName = "ecommerceDb";
     }
 
     public IMongoDatabase GetConnection()

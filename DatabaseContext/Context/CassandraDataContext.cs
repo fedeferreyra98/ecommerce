@@ -9,14 +9,13 @@ public class CassandraDataContext : Mappings, IConnection<ISession>
 {
     private ISession _session;
 
-    public CassandraDataContext(IConfiguration configuration)
+    public CassandraDataContext()
     {
         _session = Cluster.Builder()
-            .WithCloudSecureConnectionBundle(@"string donde sta el archivo secure-connect-e-commerce")
-            .WithCredentials(configuration.GetValue<string>("Databases:Cassandra:ClientID"),
-                configuration.GetValue<string>("Databases:Cassandra:ClientSecret"))
+            .AddContactPoint("localhost") // assuming Cassandra is running on localhost
+            .WithPort(9042) // the default Cassandra port is 9042
             .Build()
-            .Connect();
+            .Connect("usercart");
     }
     public ISession GetConnection()
     {

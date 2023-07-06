@@ -22,9 +22,9 @@ public class UserCartController
         return await _userCartService.GetUserActivityAsync(userId);
     }
 
-    public async Task ChangeUserCart(UserCartDTO userCartDto)
+    public async Task<Guid> ChangeUserCart(UserCartDTO userCartDto)
     {
-        await _userCartService.ChangeUserCart(userCartDto);
+        return await _userCartService.ChangeUserCart(userCartDto);
     }
 
     public async Task RestoreCart(Guid userId, Guid logId)

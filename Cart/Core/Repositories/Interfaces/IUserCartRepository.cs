@@ -4,7 +4,7 @@ namespace ecommerce.Cart.Core.Repositories.Interfaces;
 
 public interface IUserCartRepository
 {
-    Task ChangeUserCartAsync(UserCartDTO userCartInfo);
+    Task<Guid> ChangeUserCartAsync(UserCartDTO userCartInfo);
 
     Task<List<UserActivityDTO>> GetUserActivityAsync(Guid userId);
 

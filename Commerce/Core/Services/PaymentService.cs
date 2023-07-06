@@ -43,7 +43,8 @@ public class PaymentService : IPaymentService
             OrderId = orderId,
             User = user,
             PaymentDate = DateTime.Now,
-            PaymentMethod = paymentMethod
+            PaymentMethod = paymentMethod,
+            FinalPrice = order.FinalPrice
         };
 
         await _paymentRepository.Insert(newPayment);

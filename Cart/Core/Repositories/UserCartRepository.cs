@@ -17,7 +17,7 @@ public class UserCartRepository : IUserCartRepository
             _cassandraConnection = cassandraConnection;
         }
 
-        public async Task ChangeUserCartAsync(UserCartDTO info)
+        public async Task<Guid> ChangeUserCartAsync(UserCartDTO info)
         {
             var processId = Guid.NewGuid();
             var userId = info.User.UserId;
@@ -51,6 +51,8 @@ public class UserCartRepository : IUserCartRepository
                 await _redisConnection.GetConnection()
                 .SetAddAsync($"userCart:{userId}", new RedisValue(product.ProductCatalogId.ToString()));
             }
+
+            return processId;
         }
 
         public async Task<UserCartDTO?> GetUserCartAsync(Guid userId)

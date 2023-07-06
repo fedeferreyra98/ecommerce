@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System.ComponentModel.Design;
+using System.Globalization;
+using Amazon.Runtime.Internal.Transform;
 using Cassandra;
 using ecommerce.Cart.Core.Controllers;
 using ecommerce.Cart.Core.Dtos;
@@ -19,6 +21,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using StackExchange.Redis;
+using Order = ecommerce.Commerce.Core.Models.Order;
 using ProductCartDTO = ecommerce.Cart.Core.Dtos.ProductCartDTO;
 using UserDTO = ecommerce.Commerce.Core.DTOs.UserDTO;
 
@@ -63,6 +66,19 @@ public class Program
         var cartController = serviceProvider.GetService<UserCartController>();
         
         //Initialize data
+        //payment methods
+        const string transferencia = "Transferencia";
+        const string tarjetaCredito = "Tarjeta de Credito";
+        const string tarjetaDebito = "Tarjeta de Debito";
+        
+        static Dictionary<int,string> getPaymentMethods()
+        {
+            var paymentMethods = new Dictionary<int, string>();
+            paymentMethods.Add(1,tarjetaCredito);
+            paymentMethods.Add(2,tarjetaDebito);
+            paymentMethods.Add(3,transferencia);
+            return paymentMethods;
+        }
         var productOneDto = new ProductDTO
         {
             ProductName = "Apple iPhone 13",
@@ -118,6 +134,9 @@ public class Program
             LastName = "Gomez",
             Address = "Talcahuano 234"
         };
+        
+        //Initialize GUID stack to keep track of cart changes
+        var logCart = new Stack<Guid>();
         
         //Logica del programa
 
@@ -370,7 +389,8 @@ public class Program
         Console.WriteLine($"Se agrega UN {iphoneProduct.ProductName} al carrito");
         iphoneCart.Quantity = 1;
         cart.Products.Add(iphoneCart);
-        UpdateCart(cart, cartController);
+        
+        UpdateCart(cart, cartController, logCart);
         
         //actualizo referencia de cart
         cart = cartController.GetUserCart(loggedUser.Id).Result;
@@ -385,7 +405,7 @@ public class Program
         Console.WriteLine($"Se agrega DOS {cuchilloProduct.ProductName} al carrito");
         cuchilloCart.Quantity = 2;
         cart.Products.Add(cuchilloCart);
-        UpdateCart(cart, cartController);
+        UpdateCart(cart, cartController, logCart);
         
         //actualizo referencia de cart
         cart = cartController.GetUserCart(loggedUser.Id).Result;
@@ -402,7 +422,7 @@ public class Program
         // 17. Eliminar UN producto 3 del carrito
         Console.WriteLine($"Se elimina UN {cuchilloProduct.ProductName} del carrito");
         cart.Products.First(x => x.ProductName == cuchilloProduct.ProductName).Quantity--;
-        UpdateCart(cart, cartController);
+        UpdateCart(cart, cartController, logCart);
         
         //actualizo referencia de cart
         cart = cartController.GetUserCart(loggedUser.Id).Result;
@@ -420,7 +440,7 @@ public class Program
         Console.WriteLine($"Se agrega UN {samsungProduct.ProductName} al carrito");
         samsungCart.Quantity = 1;
         cart.Products.Add(samsungCart);
-        UpdateCart(cart, cartController);
+        UpdateCart(cart, cartController, logCart);
         
         //actualizo referencia de cart
         cart = cartController.GetUserCart(loggedUser.Id).Result;
@@ -430,27 +450,64 @@ public class Program
         Console.ReadLine();
         Console.WriteLine("Continua la ejecucion del programa...");
         Console.WriteLine();
+        
         // 20. Mostrar Carrito;
         Print(cart);
         
         // 21. Deshacer ultimo paso
+        RestoreCart(cartController, logCart, loggedUser.Id);
         
-        // PAUSA -- 22. mostrarCarrito (1:1, 3:1);
+        //actualizo referencia de cart
+        cart = cartController.GetUserCart(loggedUser.Id).Result;
+        
+        // PAUSA --
+        Console.WriteLine("\nPresione enter para continuar..");
+        Console.ReadLine();
+        Console.WriteLine("Continua la ejecucion del programa...");
+        Console.WriteLine();
+        
+        // 22. Mostrar Carrito:
+        Print(cart);
 
         #endregion
 
+        // PAUSA --
+        Console.WriteLine("\nPresione enter para continuar..");
+        Console.ReadLine();
+        Console.WriteLine("Continua la ejecucion del programa...");
+        Console.WriteLine();
+        
         #region Creacion del Pedido
 
-        // "Se confirma el carrito y automàticamente se crea un pedido"
-        // 23. confirmarCarrito(generarPedido());
+        // 23. Checkout del carrito
+        Console.WriteLine("Se confirma el carrito y se crea un pedido");
+        CheckoutCart();
+
+        async void CheckoutCart()
+        {
+            await cartController.Checkout(loggedUser.Id);
+        }
         
         // PAUSA
         Console.WriteLine("\nPresione enter para continuar..");
         Console.ReadLine();
         Console.WriteLine("Continua la ejecucion del programa...");
         Console.WriteLine();
+        
         // 24. mostrarPedido();
-
+        Console.WriteLine("Se imprime el pedido:");
+        var order = orderController.GetAllOrders().Result.First(x => x.User.Id == loggedUser.Id);
+        Console.WriteLine("---------------------------------");
+        Console.WriteLine($"Pedido de {order.User.Name} :");
+        
+        foreach (var product in order.Products)
+        {
+            Console.WriteLine($"Producto: {productController.GetById(product.ProductCatalog.ProductId).Result.ProductName}");
+            Console.WriteLine($"Precio: {product.ProductCatalog.Price}");
+            Console.WriteLine($"Cantidad: {product.Quantity}");
+        }
+        Console.WriteLine($"Total: ${order.FinalPrice}");
+        
         #endregion
 
         #region Factura y pago
@@ -464,9 +521,28 @@ public class Program
         Console.WriteLine();
         
         // 26. mostrarFactura();
-        //
+        
         // "Se realiza el pago"
         // 27. realizarPago();
+        Console.WriteLine("Metodos de pago disponibles:");
+        var input = 0;
+        var paymentMethods = getPaymentMethods();
+        Console.WriteLine($"1. {tarjetaCredito}");
+        Console.WriteLine($"2. {tarjetaDebito}");
+        Console.WriteLine($"3. {transferencia}");
+        do
+        {
+            Console.WriteLine("Elija su metodo de pago ingresando el numero correspondiente:");
+            username = Console.ReadLine();
+
+            if (usersRegistered.All(x => x.Name != username))
+            {
+                Console.WriteLine("El usuario no existe, por favor intente nuevamente");
+            }
+        } while (!paymentMethods.ContainsKey(input));
+        
+        paymentController.CreatePayment(order.OrderId, loggedUser.Id, paymentMethods[input]);
+        
         // PAUSA
         Console.WriteLine("\nPresione enter para continuar..");
         Console.ReadLine();
@@ -474,8 +550,25 @@ public class Program
         Console.WriteLine();
         
         // 28. mostrarPagoRealizado();
-
+        var payment = paymentController.GetAllPayments().Result.FirstOrDefault(x => x.OrderId == order.OrderId);
+        Print(payment);
+        
         #endregion
+    }
+
+    private static void Print(Payment payment)
+    {
+        Console.WriteLine("---------------------------------");
+        Console.WriteLine($"Pago realizado por {payment.User.Name} {payment.User.LastName} el dia {payment.PaymentDate}.");
+        Console.WriteLine($"Metodo de pago: {payment.PaymentMethod}");
+        Console.WriteLine($"Monto final: {payment.FinalPrice}");
+        Console.WriteLine($"Direccion de envio: {payment.User.Address}");
+        Console.WriteLine("---------------------------------");
+    }
+
+    private static async void RestoreCart(UserCartController cartController, Stack<Guid> logCart, Guid loggedUserId)
+    {
+        await cartController.RestoreCart(loggedUserId, logCart.Pop());
     }
 
     private static void Print(UserCartDTO cart)
@@ -492,9 +585,10 @@ public class Program
         }
     }
 
-    private static async void UpdateCart(UserCartDTO cart, UserCartController cartController)
+    private static async void UpdateCart(UserCartDTO cart, UserCartController cartController, Stack<Guid> cartLog)
     {
-        await cartController.ChangeUserCart(cart);
+        var lastLogId = await cartController.ChangeUserCart(cart);
+        cartLog.Push(lastLogId);
     }
 
     private static void Print(List<ProductCatalog> catalog)

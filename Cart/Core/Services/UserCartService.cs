@@ -30,9 +30,9 @@ public class UserCartService : IUserCartService
         return await _userCartRepository.GetUserActivityAsync(userId);
     }
 
-    public async Task ChangeUserCart(UserCartDTO userCartInfo)
+    public async Task<Guid> ChangeUserCart(UserCartDTO userCartInfo)
     {
-        await _userCartRepository.ChangeUserCartAsync(userCartInfo);
+        return await _userCartRepository.ChangeUserCartAsync(userCartInfo);
     }
 
     public async Task RestoreCart(Guid userId, Guid logId)

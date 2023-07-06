@@ -9,7 +9,7 @@ public interface IUserCartService
 
     Task<List<UserActivityDTO>> GetUserActivityAsync(Guid userId);
 
-    Task ChangeUserCart(UserCartDTO userCartInfo);
+    Task<Guid> ChangeUserCart(UserCartDTO userCartInfo);
 
     Task RestoreCart(Guid userId, Guid logId);
 

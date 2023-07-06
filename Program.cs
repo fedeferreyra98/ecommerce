@@ -43,18 +43,21 @@ public class Program
             .AddTransient<IProductRepository, ProductRepository>()
             .AddTransient<IUserRepository, UserRepository>()
             .AddTransient<IUserCartRepository, UserCartRepository>()
+            .AddTransient<IInvoiceRepository, InvoiceRepository>()
             .AddSingleton<ICatalogService, CatalogService>() //setup services
             .AddSingleton<IOrderService, OrderService>()
             .AddSingleton<IPaymentService, PaymentService>()
             .AddSingleton<IProductService, ProductService>()
             .AddSingleton<IUserService, UserService>()
             .AddSingleton<IUserCartService, UserCartService>()
+            .AddSingleton<IInvoiceService, InvoiceService>()
             .AddTransient<UserController>() // setup controllers
             .AddTransient<OrderController>()
             .AddTransient<PaymentController>()
             .AddTransient<ProductController>()
             .AddTransient<CatalogController>()
             .AddTransient<UserCartController>()
+            .AddTransient<InvoiceController>()
             .BuildServiceProvider();
 
         //Initialize controllers/services/repositories
@@ -64,6 +67,7 @@ public class Program
         var productController = serviceProvider.GetService<ProductController>();
         var catalogController = serviceProvider.GetService<CatalogController>();
         var cartController = serviceProvider.GetService<UserCartController>();
+        var invoiceController = serviceProvider.GetService<InvoiceController>();
         
         //Initialize data
         //payment methods
@@ -514,6 +518,10 @@ public class Program
 
         // "Se genera la factura"
         // 25. generarFactura();
+        Console.WriteLine("Generando factura...");
+        invoiceController.CreateInvoice(loggedUser.Id, order.OrderId);
+        var factura = invoiceController.GetAll().Result.First(x => x.OrderId == order.OrderId);
+        
         // PAUSA
         Console.WriteLine("\nPresione enter para continuar..");
         Console.ReadLine();
@@ -521,6 +529,8 @@ public class Program
         Console.WriteLine();
         
         // 26. mostrarFactura();
+        Print(factura, loggedUser);
+        Console.WriteLine();
         
         // "Se realiza el pago"
         // 27. realizarPago();
@@ -554,6 +564,16 @@ public class Program
         Print(payment);
         
         #endregion
+    }
+
+    private static void Print(Invoice factura, User cliente)
+    {
+        Console.WriteLine($"Cliente: {cliente.Name} {cliente.LastName}");
+        Console.WriteLine($"Nro de Orden: {factura.OrderId}");
+        Console.WriteLine($"Monto: {factura.Price}");
+        Console.WriteLine($"Condicion de Iva: {factura.Iva}");
+        Console.WriteLine($"Fecha de emision: {factura.Date}");
+        Console.WriteLine($"Pagada: {factura.Payed}");
     }
 
     private static void Print(Payment payment)

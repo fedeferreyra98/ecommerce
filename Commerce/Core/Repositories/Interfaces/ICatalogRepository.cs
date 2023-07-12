@@ -4,17 +4,17 @@ namespace ecommerce.Commerce.Core.Repositories.Interfaces;
 
 public interface ICatalogRepository
 {
-    Task<List<ProductCatalog>> GetAll();
+    List<ProductCatalog> GetAll();
 
-    Task<ProductCatalog> GetProductById(Guid id);
+    ProductCatalog GetProductById(Guid id);
 
-    Task<List<ProductCatalog>> GetLogByProductId(Guid productId);
+    List<ProductCatalog> GetLogByProductId(Guid productId);
 
-    Task Insert(ProductCatalog catalog);
+    void Insert(ProductCatalog catalog);
 
-    Task InsertProductLog(ProductCatalog catalog);
+    void InsertProductLog(ProductCatalog catalog);
 
-    Task Update(ProductCatalog catalog);
+    void Update(ProductCatalog catalog);
 
-    Task Delete(Guid productCatalogId);
+    void Delete(Guid productCatalogId);
 }

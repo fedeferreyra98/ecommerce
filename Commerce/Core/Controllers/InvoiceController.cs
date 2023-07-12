@@ -14,17 +14,17 @@ public class InvoiceController
         _orderService = orderService;
     }
 
-    public async Task<List<Invoice>> GetAll()
+    public List<Invoice> GetAll()
     {
-        return await _invoiceService.GetAllInvoices();
+        return _invoiceService.GetAllInvoices();
     }
 
-    public async Task<Invoice> GetInvoiceById(Guid invoiceId)
+    public Invoice GetInvoiceById(Guid invoiceId)
     {
-        return await _invoiceService.GetInvoiceById(invoiceId);
+        return _invoiceService.GetInvoiceById(invoiceId);
     }
 
-    public async void CreateInvoice(Guid userId, Guid orderId)
+    public void CreateInvoice(Guid userId, Guid orderId)
     {
         var order = _orderService.GetOrderById(orderId).Result;
         var invoice = new Invoice()
@@ -36,7 +36,7 @@ public class InvoiceController
             Payed = false,
             Price = order.FinalPrice
         };
-        await _invoiceService.InsertInvoice(invoice);
+        _invoiceService.InsertInvoice(invoice);
     }
     
 }

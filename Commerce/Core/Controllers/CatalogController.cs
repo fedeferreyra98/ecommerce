@@ -14,37 +14,37 @@ public class CatalogController
         _catalogService = catalogService;
     }
 
-    public async Task<List<ProductCatalog>> GetCatalog()
+    public  List<ProductCatalog> GetCatalog()
     {
-        return await _catalogService.GetAllProductsCatalog();
+        return  _catalogService.GetAllProductsCatalog();
     }
 
-    public async Task<ProductCatalog> GetProductCatalogById(Guid id)
+    public  ProductCatalog GetProductCatalogById(Guid id)
     {
-        return await _catalogService.GetProductCatalogById(id);
+        return  _catalogService.GetProductCatalogById(id);
     }
 
-    public async Task<List<ProductCatalog>> GetCatalogLogById(Guid productId)
+    public  List<ProductCatalog> GetCatalogLogById(Guid productId)
     {
-        return await _catalogService.GetProductCatalogLogById(productId);
+        return  _catalogService.GetProductCatalogLogById(productId);
     }
 
-    public async void InsertProductCatalog(ProductCatalogDTO productCatalogDto)
+    public void InsertProductCatalog(ProductCatalogDTO productCatalogDto)
     {
         if (productCatalogDto is null)
             throw new ArgumentNullException(nameof(productCatalogDto), "Debe ingresar un producto de catalogo.");
-        await _catalogService.InsertProductCatalog(productCatalogDto);
+        _catalogService.InsertProductCatalog(productCatalogDto);
     }
 
-    public async void UpdateProductCatalog(ProductCatalog productCatalog)
+    public void UpdateProductCatalog(ProductCatalog productCatalog)
     {
         if (productCatalog is null)
-            throw new ArgumentNullException(nameof(productCatalog), "Debe ingresar un producto de catalogo.");
-        await _catalogService.UpdateProductCatalog(productCatalog);
+            throw new ArgumentNullException(nameof(productCatalog), "Debe ingresar un producto de catalogo."); 
+        _catalogService.UpdateProductCatalog(productCatalog);
     }
 
-    public async void DeleteProductCatalog(Guid id)
-    {
-        await _catalogService.DeleteProductCatalog(id);
+    public void DeleteProductCatalog(Guid id)
+    { 
+        _catalogService.DeleteProductCatalog(id);
     }
 }

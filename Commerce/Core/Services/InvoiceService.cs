@@ -13,23 +13,23 @@ public class InvoiceService : IInvoiceService
         _invoiceRepository = invoiceRepository;
     }
 
-    public async Task<List<Invoice>> GetAllInvoices()
+    public List<Invoice> GetAllInvoices()
     {
-        return await _invoiceRepository.GetAll();
+        return _invoiceRepository.GetAll();
     }
 
-    public async Task<Invoice> GetInvoiceById(Guid invoiceId)
+    public Invoice GetInvoiceById(Guid invoiceId)
     {
-        return await _invoiceRepository.GetById(invoiceId);
+        return _invoiceRepository.GetById(invoiceId);
     }
 
-    public async Task InsertInvoice(Invoice invoice)
+    public void InsertInvoice(Invoice invoice)
     {
-        await _invoiceRepository.Insert(invoice);
+        _invoiceRepository.Insert(invoice);
     }
 
-    public async Task UpdateInvoice(Invoice invoiceUpdated)
+    public void UpdateInvoice(Invoice invoiceUpdated)
     {
-        await _invoiceRepository.Update(invoiceUpdated);
+        _invoiceRepository.Update(invoiceUpdated);
     }
 }

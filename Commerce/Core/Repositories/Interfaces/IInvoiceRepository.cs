@@ -4,10 +4,10 @@ namespace ecommerce.Commerce.Core.Repositories.Interfaces;
 
 public interface IInvoiceRepository
 {
-    Task<List<Invoice>> GetAll();
-    Task<Invoice> GetById(Guid invoiceId);
+    List<Invoice> GetAll();
+    Invoice GetById(Guid invoiceId);
 
-    Task Insert(Invoice invoice);
+    void Insert(Invoice invoice);
 
-    Task Update(Invoice invoiceUpdated);
+    void Update(Invoice invoiceUpdated);
 }

@@ -27,9 +27,9 @@ public class PaymentController
     public async void CreatePayment(Guid orderId, Guid userId, string paymentType)
     {
         await _paymentService.InsertPayment(orderId, userId, paymentType);
-        var payedInvoice = _invoiceService.GetAllInvoices().Result.First(x => x.OrderId == orderId);
+        var payedInvoice = _invoiceService.GetAllInvoices().First(x => x.OrderId == orderId);
         payedInvoice.Payed = true;
-        await _invoiceService.UpdateInvoice(payedInvoice);
+        _invoiceService.UpdateInvoice(payedInvoice);
         Console.WriteLine("Pago realizado con exito!");
     }
 

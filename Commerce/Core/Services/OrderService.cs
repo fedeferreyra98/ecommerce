@@ -44,7 +44,7 @@ public class OrderService : IOrderService
         
         foreach (var productOrdered in order.Products)
         {
-            var productCatalog = await _catalogService.GetProductCatalogById(productOrdered.ProductCatalogId);
+            var productCatalog = _catalogService.GetProductCatalogById(productOrdered.ProductCatalogId);
             var productInStock = await _productRepository.GetById(productCatalog.ProductId);
             productInStock.Stock -= productOrdered.Quantity;
             await _productRepository.Update(productInStock);
@@ -72,7 +72,7 @@ public class OrderService : IOrderService
     {
         foreach (var productOrdered in order.Products)
         {
-            var productCatalog = await _catalogService.GetProductCatalogById(productOrdered.ProductCatalogId);
+            var productCatalog = _catalogService.GetProductCatalogById(productOrdered.ProductCatalogId);
             var productInStock = await _productRepository.GetById(productCatalog.ProductId);
 
             if (productInStock.Stock < productOrdered.Quantity)

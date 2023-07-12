@@ -4,10 +4,10 @@ namespace ecommerce.Commerce.Core.Services.Interfaces;
 
 public interface IInvoiceService
 {
-    Task<List<Invoice>> GetAllInvoices();
-    Task<Invoice> GetInvoiceById(Guid invoiceId);
+    List<Invoice> GetAllInvoices();
+    Invoice GetInvoiceById(Guid invoiceId);
 
-    Task InsertInvoice(Invoice invoice);
+    void InsertInvoice(Invoice invoice);
 
-    Task UpdateInvoice(Invoice invoiceUpdated);
+    void UpdateInvoice(Invoice invoiceUpdated);
 }

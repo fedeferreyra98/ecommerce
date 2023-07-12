@@ -1,7 +1,6 @@
 using ecommerce.Commerce.Core.Models;
 using ecommerce.Commerce.Core.Repositories.Interfaces;
 using ecommerce.DatabaseContext.Context;
-using Microsoft.EntityFrameworkCore;
 
 namespace ecommerce.Commerce.Core.Repositories;
 
@@ -14,25 +13,25 @@ public class InvoiceRepository : IInvoiceRepository
         _dbContext = dbContext;
     }
     
-    public async Task<List<Invoice>> GetAll()
+    public List<Invoice> GetAll()
     {
-        return await _dbContext.Invoice.ToListAsync();
+        return _dbContext.Invoice.ToList();
     }
 
-    public async Task<Invoice> GetById(Guid invoiceId)
+    public Invoice GetById(Guid invoiceId)
     {
-        return await _dbContext.Invoice.Where(x => x.Id == invoiceId).FirstAsync();
+        return _dbContext.Invoice.First(x => x.Id == invoiceId);
     }
 
-    public async Task Insert(Invoice invoice)
+    public void Insert(Invoice invoice)
     {
-        await _dbContext.Invoice.AddAsync(invoice);
-        await _dbContext.SaveChangesAsync();
+        _dbContext.Invoice.Add(invoice);
+        _dbContext.SaveChanges();
     }
 
-    public async Task Update(Invoice invoiceUpdated)
+    public void Update(Invoice invoiceUpdated)
     {
-        var invoice = await _dbContext.Invoice.FindAsync(invoiceUpdated.Id);
+        var invoice = _dbContext.Invoice.Find(invoiceUpdated.Id);
         
         if (invoice != null)
         {
@@ -43,6 +42,6 @@ public class InvoiceRepository : IInvoiceRepository
             invoice.OrderId = invoiceUpdated.OrderId;
             invoice.Payed = invoiceUpdated.Payed;
         }
-        await _dbContext.SaveChangesAsync();
+        _dbContext.SaveChanges();
     }
 }

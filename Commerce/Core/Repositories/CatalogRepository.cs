@@ -17,24 +17,24 @@ public class CatalogRepository : ICatalogRepository
         _mongoConnection = mongoConnection;
         _cassandraConnection = cassandraConnection;
     }
-    public async Task<List<ProductCatalog>> GetAll()
+    public List<ProductCatalog> GetAll()
     {
-        return (await _mongoConnection.GetConnection()
+        return _mongoConnection.GetConnection()
                 .GetCollection<ProductCatalog>("ProductCatalogs")
-                .FindAsync(new BsonDocument()))
+                .Find(new BsonDocument())
             .ToList();
     }
 
-    public async Task<ProductCatalog> GetProductById(Guid id)
+    public ProductCatalog GetProductById(Guid id)
     {
         var filter = Builders<ProductCatalog>.Filter.Eq(x => x.Id, id);
 
-        return await _mongoConnection.GetConnection()
+        return _mongoConnection.GetConnection()
             .GetCollection<ProductCatalog>("ProductCatalogs")
-            .Find(filter).SingleAsync();
+            .Find(filter).Single();
     }
 
-    public async Task<List<ProductCatalog>> GetLogByProductId(Guid productId)
+    public List<ProductCatalog> GetLogByProductId(Guid productId)
     {
         var query = _cassandraConnection.GetConnection().Execute($@"SELECT * FROM catalog WHERE productId = {productId}");
 
@@ -43,36 +43,36 @@ public class CatalogRepository : ICatalogRepository
         return log;
     }
 
-    public async Task Insert(ProductCatalog product)
+    public void Insert(ProductCatalog product)
     {
-        await _mongoConnection.GetConnection()
+        _mongoConnection.GetConnection()
             .GetCollection<ProductCatalog>("ProductCatalogs")
             .InsertOneAsync(product);
     }
 
-    public async Task InsertProductLog(ProductCatalog product)
+    public void InsertProductLog(ProductCatalog product)
     {
-        var query = await _cassandraConnection.GetConnection()
-                                    .PrepareAsync(@"INSERT INTO catalog (id, moment, authorId, productId, price) VALUES (?,?,?,?,?)");
+        var query = _cassandraConnection.GetConnection()
+                                    .Prepare(@"INSERT INTO catalog (id, moment, authorId, productId, price) VALUES (?,?,?,?,?)");
         
-        await _cassandraConnection.GetConnection()
-            .ExecuteAsync(query.Bind(Guid.NewGuid(), DateTime.Now, product.AuthorId,
+        _cassandraConnection.GetConnection()
+            .Execute(query.Bind(Guid.NewGuid(), DateTime.Now, product.AuthorId,
                 product.ProductId, product.Price));
     }
 
-    public async Task Update(ProductCatalog product)
+    public void Update(ProductCatalog product)
     {
         var filter = Builders<ProductCatalog>.Filter.Eq(x => x.Id, product.Id);
 
-        await _mongoConnection.GetConnection()
+        _mongoConnection.GetConnection()
             .GetCollection<ProductCatalog>("ProductCatalogs")
             .ReplaceOneAsync(filter, product);
     }
 
-    public async Task Delete(Guid id)
+    public void Delete(Guid id)
     {
         var filter = Builders<ProductCatalog>.Filter.Eq(x => x.Id, id);
 
-        await _mongoConnection.GetConnection().GetCollection<ProductCatalog>("ProductCatalogs").DeleteManyAsync(filter);
+        _mongoConnection.GetConnection().GetCollection<ProductCatalog>("ProductCatalogs").DeleteManyAsync(filter);
     }
 }

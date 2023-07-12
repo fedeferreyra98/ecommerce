@@ -146,7 +146,7 @@ public class Program
         // 1. Crear los usuarios
         userController.Create(userOneDto);
         userController.Create(userTwoDto);
-        var usersRegistered = userController.GetAll().Result;
+        var usersRegistered = userController.GetAll();
         
         Console.WriteLine();
         // 2. Logging
@@ -209,7 +209,7 @@ public class Program
         productController.Create(productOneDto);
         productController.Create(productTwoDto);
         productController.Create(productThreeDto);
-        var productsAdded = productController.GetAll().Result;
+        var productsAdded = productController.GetAll();
         
         
 
@@ -256,7 +256,7 @@ public class Program
         Console.WriteLine();
         
         //Referencio a los productos del catalogo para despues
-        var catalog = catalogController.GetCatalog().Result;
+        var catalog = catalogController.GetCatalog();
         var iphoneCatalog = catalog.First(x => x.ProductId == iphoneProduct.ProductId);
         var samsungCatalog = catalog.First(x => x.ProductId == samsungProduct.ProductId);
         var cuchilloCatalog = catalog.First(x => x.ProductId == cuchilloProduct.ProductId);
@@ -268,7 +268,7 @@ public class Program
         
         // 7. Mostrar Catalogo
         Console.WriteLine("Se muestra el catalogo");
-        Print(catalogController.GetCatalog().Result);
+        Print(catalogController.GetCatalog());
         Console.WriteLine();
 
         // "Se modifica el precio del producto: "
@@ -285,19 +285,19 @@ public class Program
         });
         
         //Actualizo referencia del catalogo e iphone
-        catalog = catalogController.GetCatalog().Result;
+        catalog = catalogController.GetCatalog();
         iphoneCatalog = catalog.First(x => x.ProductId == iphoneProduct.ProductId);
         
         Console.WriteLine();
         
         // 9.mostrarCatalogo(1,2,3);
         Console.WriteLine("Se muestra el catalogo");
-        Print(catalogController.GetCatalog().Result);
+        Print(catalogController.GetCatalog());
         Console.WriteLine();
         
         // 10.mostrarLog(valorAnterior, valorActualizado, operador);
         Console.WriteLine("Se muestra el Log del cambio realizado");
-        Print(catalogController.GetCatalogLogById(iphoneProduct.ProductId).Result);
+        Print(catalogController.GetCatalogLogById(iphoneProduct.ProductId));
         Console.WriteLine();
         
         // 11. "Ingreso de nuevo usuario;
@@ -362,7 +362,7 @@ public class Program
         
         #region Uso del carrito
 
-        var cart = cartController.GetUserCart(loggedUser.Id).Result;
+        var cart = cartController.GetUserCart(loggedUser.Id);
 
         var iphoneCart = new ProductCartDTO()
         {
@@ -394,7 +394,7 @@ public class Program
         UpdateCart(cart, cartController, logCart);
         
         //actualizo referencia de cart
-        cart = cartController.GetUserCart(loggedUser.Id).Result;
+        cart = cartController.GetUserCart(loggedUser.Id);
         
         //PAUSA
         Console.WriteLine("\nPresione enter para continuar..");
@@ -409,7 +409,7 @@ public class Program
         UpdateCart(cart, cartController, logCart);
         
         //actualizo referencia de cart
-        cart = cartController.GetUserCart(loggedUser.Id).Result;
+        cart = cartController.GetUserCart(loggedUser.Id);
 
         // PAUSA 
         Console.WriteLine("\nPresione enter para continuar..");
@@ -426,7 +426,7 @@ public class Program
         UpdateCart(cart, cartController, logCart);
         
         //actualizo referencia de cart
-        cart = cartController.GetUserCart(loggedUser.Id).Result;
+        cart = cartController.GetUserCart(loggedUser.Id);
         
         // PAUSA
         Console.WriteLine("\nPresione enter para continuar..");
@@ -444,7 +444,7 @@ public class Program
         UpdateCart(cart, cartController, logCart);
         
         //actualizo referencia de cart
-        cart = cartController.GetUserCart(loggedUser.Id).Result;
+        cart = cartController.GetUserCart(loggedUser.Id);
         
         // PAUSA 
         Console.WriteLine("\nPresione enter para continuar..");
@@ -456,10 +456,10 @@ public class Program
         Print(cart);
         
         // 21. Deshacer ultimo paso
-        RestoreCart(cartController, logCart, loggedUser.Id);
+        cartController.RestoreCart(loggedUser.Id, logCart.Pop());
         
         //actualizo referencia de cart
-        cart = cartController.GetUserCart(loggedUser.Id).Result;
+        cart = cartController.GetUserCart(loggedUser.Id);
         
         // PAUSA --
         Console.WriteLine("\nPresione enter para continuar..");
@@ -482,13 +482,8 @@ public class Program
 
         // 23. Checkout del carrito
         Console.WriteLine("Se confirma el carrito y se crea un pedido");
-        CheckoutCart();
+        cartController.Checkout(loggedUser.Id);
 
-        async void CheckoutCart()
-        {
-            await cartController.Checkout(loggedUser.Id);
-        }
-        
         // PAUSA
         Console.WriteLine("\nPresione enter para continuar..");
         Console.ReadLine();
@@ -497,13 +492,13 @@ public class Program
         
         // 24. mostrarPedido();
         Console.WriteLine("Se imprime el pedido:");
-        var order = orderController.GetAllOrders().Result.First(x => x.User.Id == loggedUser.Id);
+        var order = orderController.GetAllOrders().First(x => x.User.Id == loggedUser.Id);
         Console.WriteLine("---------------------------------");
         Console.WriteLine($"Pedido de {order.User.Name} :");
         
         foreach (var product in order.Products)
         {
-            Console.WriteLine($"Producto: {productController.GetById(product.ProductCatalog.ProductId).Result.ProductName}");
+            Console.WriteLine($"Producto: {productController.GetById(product.ProductCatalog.ProductId).ProductName}");
             Console.WriteLine($"Precio: {product.ProductCatalog.Price}");
             Console.WriteLine($"Cantidad: {product.Quantity}");
         }
@@ -517,7 +512,7 @@ public class Program
         // 25. generarFactura();
         Console.WriteLine("Generando factura...");
         invoiceController.CreateInvoice(loggedUser.Id, order.OrderId);
-        var factura = invoiceController.GetAll().Result.First(x => x.OrderId == order.OrderId);
+        var factura = invoiceController.GetAll().First(x => x.OrderId == order.OrderId);
         
         // PAUSA
         Console.WriteLine("\nPresione enter para continuar..");
@@ -557,7 +552,7 @@ public class Program
         Console.WriteLine();
         
         // 28. mostrarPagoRealizado();
-        var payment = paymentController.GetAllPayments().Result.FirstOrDefault(x => x.OrderId == order.OrderId);
+        var payment = paymentController.GetAllPayments().FirstOrDefault(x => x.OrderId == order.OrderId);
         Print(payment);
         
         #endregion
@@ -585,7 +580,7 @@ public class Program
 
     private static async void RestoreCart(UserCartController cartController, Stack<Guid> logCart, Guid loggedUserId)
     {
-        await cartController.RestoreCart(loggedUserId, logCart.Pop());
+        
     }
 
     private static void Print(UserCartDTO cart)
@@ -604,7 +599,7 @@ public class Program
 
     private static async void UpdateCart(UserCartDTO cart, UserCartController cartController, Stack<Guid> cartLog)
     {
-        var lastLogId = await cartController.ChangeUserCart(cart);
+        var lastLogId = cartController.ChangeUserCart(cart);
         cartLog.Push(lastLogId);
     }
 

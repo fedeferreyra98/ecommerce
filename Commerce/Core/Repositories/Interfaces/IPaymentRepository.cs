@@ -4,9 +4,9 @@ namespace ecommerce.Commerce.Core.Repositories.Interfaces;
 
 public interface IPaymentRepository
 {
-    Task<List<Payment>> GetAll();
+    List<Payment> GetAll();
 
-    Task<Payment> GetById(Guid id);
+    Payment GetById(Guid id);
 
-    Task Insert(Payment newPayment);
+    void Insert(Payment newPayment);
 }

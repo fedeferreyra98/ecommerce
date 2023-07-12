@@ -26,7 +26,7 @@ public class InvoiceController
 
     public void CreateInvoice(Guid userId, Guid orderId)
     {
-        var order = _orderService.GetOrderById(orderId).Result;
+        var order = _orderService.GetOrderById(orderId);
         var invoice = new Invoice()
         {
             User = userId,

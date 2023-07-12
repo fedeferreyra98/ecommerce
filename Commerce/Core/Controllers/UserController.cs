@@ -12,36 +12,36 @@ public class UserController
     {
         _userService = userService;
     }
-    public async Task<User> GetById(Guid id)
+    public User GetById(Guid id)
     {
-        return await _userService.GetUserById(id);
+        return _userService.GetUserById(id);
     }
 
-    public async Task<List<User>> GetAll()
+    public List<User> GetAll()
     {
-        return await _userService.GetAllUsers();
+        return _userService.GetAllUsers();
     }
 
-    public async Task Create(UserDTO userDto)
+    public void Create(UserDTO userDto)
     {
         if (userDto is null) throw new ArgumentNullException(nameof(userDto),"Debe ingresar un usuario.");
-        await _userService.InsertUser(userDto);
+        _userService.InsertUser(userDto);
     }
 
-    public async Task Update(User userUpdated)
+    public void Update(User userUpdated)
     {
         if (userUpdated is null) 
             throw new ArgumentNullException(nameof(userUpdated), "Debe ingresar un usuario.");
 
-        var user = await _userService.GetUserById(userUpdated.Id);
+        var user = _userService.GetUserById(userUpdated.Id);
         if (user is null)
             throw new InvalidOperationException("El usuario no existe");
         
-        await _userService.UpdateUser(userUpdated);
+        _userService.UpdateUser(userUpdated);
         Console.WriteLine("El usuario ha sido actualizado correctamente!");
     }
 
-    public async Task Print(User user)
+    public static void Print(User user)
     {
         Console.WriteLine();
         Console.WriteLine($"Nombre: {user.Name}");

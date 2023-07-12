@@ -12,24 +12,24 @@ public class ProductController
     {
         _service = service;
     }
-    public async Task<Product> GetById(Guid id)
+    public Product GetById(Guid id)
     {
-        return await _service.GetProductById(id);
+        return _service.GetProductById(id);
     }
     
-    public async Task<List<Product>> GetAll()
+    public List<Product> GetAll()
     {
-        return await _service.GetAllProducts();
+        return _service.GetAllProducts();
     }
 
-    public async void Create(ProductDTO productDto)
+    public void Create(ProductDTO productDto)
     {
-        await _service.InsertProduct(productDto);
+        _service.InsertProduct(productDto);
     }
 
-    public async void Update(Product product)
+    public void Update(Product product)
     {
-        await _service.UpdateProduct(product);
+        _service.UpdateProduct(product);
     }
 
     public void Print(Product product)

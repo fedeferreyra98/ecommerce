@@ -12,28 +12,28 @@ public class UserCartController
         _userCartService = userCartService;
     }
 
-    public async Task<UserCartDTO?> GetUserCart(Guid userId)
+    public UserCartDTO GetUserCart(Guid userId)
     {
-        return await _userCartService.GetUserCartAsync(userId);
+        return _userCartService.GetUserCart(userId);
     }
 
-    public async Task<List<UserActivityDTO>> GetUserActivity(Guid userId)
+    public List<UserActivityDTO> GetUserActivity(Guid userId)
     {
-        return await _userCartService.GetUserActivityAsync(userId);
+        return _userCartService.GetUserActivity(userId);
     }
 
-    public async Task<Guid> ChangeUserCart(UserCartDTO userCartDto)
+    public Guid ChangeUserCart(UserCartDTO userCartDto)
     {
-        return await _userCartService.ChangeUserCart(userCartDto);
+        return _userCartService.ChangeUserCart(userCartDto);
     }
 
-    public async Task RestoreCart(Guid userId, Guid logId)
+    public void RestoreCart(Guid userId, Guid logId)
     {
-        await _userCartService.RestoreCart(userId, logId);
+        _userCartService.RestoreCart(userId, logId);
     }
 
-    public async Task Checkout(Guid userId)
+    public void Checkout(Guid userId)
     {
-        await _userCartService.Checkout(userId);
+        _userCartService.Checkout(userId);
     }
 }

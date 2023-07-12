@@ -14,19 +14,19 @@ public class PaymentController
         _invoiceService = invoiceService;
     }
 
-    public async Task<Payment> GetPaymentById(Guid id)
+    public Payment GetPaymentById(Guid id)
     {
-        return await _paymentService.GetPaymentById(id);
+        return _paymentService.GetPaymentById(id);
     }
 
-    public async Task<List<Payment>> GetAllPayments()
+    public List<Payment> GetAllPayments()
     {
-        return await _paymentService.GetAllPayments();
+        return _paymentService.GetAllPayments();
     }
 
-    public async void CreatePayment(Guid orderId, Guid userId, string paymentType)
+    public void CreatePayment(Guid orderId, Guid userId, string paymentType)
     {
-        await _paymentService.InsertPayment(orderId, userId, paymentType);
+        _paymentService.InsertPayment(orderId, userId, paymentType);
         var payedInvoice = _invoiceService.GetAllInvoices().First(x => x.OrderId == orderId);
         payedInvoice.Payed = true;
         _invoiceService.UpdateInvoice(payedInvoice);

@@ -15,46 +15,46 @@ namespace ecommerce.Commerce.Core.Repositories
             _mongoConnection = mongoConnection;
         }
 
-        public async Task<List<Product>> GetAll()
+        public  List<Product> GetAll()
         {
-            return (await _mongoConnection.GetConnection()
+            return ( _mongoConnection.GetConnection()
                     .GetCollection<Product>("Products")
-                    .FindAsync(new BsonDocument()))
+                    .Find(new BsonDocument()))
                 .ToList();
         }
 
-        public async Task<Product> GetById(Guid id)
+        public  Product GetById(Guid id)
         {
             var filter = Builders<Product>.Filter.Eq(x => x.ProductId, id);
 
-            return await _mongoConnection.GetConnection()
+            return  _mongoConnection.GetConnection()
                 .GetCollection<Product>("Products")
-                .Find(filter).SingleOrDefaultAsync();
+                .Find(filter).SingleOrDefault();
         }
 
-        public async Task Insert(Product product)
+        public void Insert(Product product)
         {
-            await _mongoConnection.GetConnection()
+             _mongoConnection.GetConnection()
                 .GetCollection<Product>("Products")
-                .InsertOneAsync(product);
+                .InsertOne(product);
         }
 
-        public async Task Update(Product product)
+        public void Update(Product product)
         {
             var filter = Builders<Product>.Filter.Eq(x => x.ProductId, product.ProductId);
 
-            await _mongoConnection.GetConnection()
+             _mongoConnection.GetConnection()
                 .GetCollection<Product>("Products")
-                .ReplaceOneAsync(filter, product);
+                .ReplaceOne(filter, product);
         }
 
-        public async Task Delete(Guid id)
+        public void Delete(Guid id)
         {
             var filter = Builders<Product>.Filter.Eq(x => x.ProductId, id);
 
-            await _mongoConnection.GetConnection()
+             _mongoConnection.GetConnection()
                 .GetCollection<Product>("Products")
-                .DeleteOneAsync(filter);
+                .DeleteOne(filter);
         }
     }
 }

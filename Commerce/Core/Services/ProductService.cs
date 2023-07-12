@@ -14,21 +14,21 @@ public class ProductService : IProductService
         _productRepository = productRepository;
     }
 
-    public async Task<List<Product>> GetAllProducts()
+    public List<Product> GetAllProducts()
     {
-        return await _productRepository.GetAll();
+        return _productRepository.GetAll();
     }
 
-    public async Task<Product> GetProductById(Guid id)
+    public Product GetProductById(Guid id)
     {
-        var product = await _productRepository.GetById(id);
+        var product = _productRepository.GetById(id);
         
         if (product is null) throw new ApplicationException("El producto no existe");
 
         return product;
     }
 
-    public async Task InsertProduct(ProductDTO productDTO)
+    public void InsertProduct(ProductDTO productDTO)
     {
         var product = new Product()
         {
@@ -39,16 +39,16 @@ public class ProductService : IProductService
             Comments = productDTO.Comments,
             Stock = productDTO.Stock
         };
-        await _productRepository.Insert(product);
+        _productRepository.Insert(product);
     }
 
-    public async Task UpdateProduct(Product product)
+    public void UpdateProduct(Product product)
     {
-        await _productRepository.Update(product);
+        _productRepository.Update(product);
     }
 
-    public async Task DeleteProduct(Guid id)
+    public void DeleteProduct(Guid id)
     {
-        await _productRepository.Delete(id);
+        _productRepository.Delete(id);
     }
 }

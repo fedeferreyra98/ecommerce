@@ -5,15 +5,15 @@ namespace ecommerce.Commerce.Core.Services.Interfaces;
 
 public interface IOrderService
 {
-    Task<List<Order>> GetAllOrders();
+    List<Order> GetAllOrders();
 
-    Task<Order> GetOrderById(Guid id);
+    Order GetOrderById(Guid id);
 
-    Task InsertOrder(OrderDTO order);
+    void InsertOrder(OrderDTO order);
 
-    Task DeleteOrder(Guid id);
+    void DeleteOrder(Guid id);
 
-    Task<List<Order>> GetOrderByStatus(bool status);
+    List<Order> GetOrderByStatus(bool status);
 
-    Task ChangeStatus(Order order);
+    void ChangeStatus(Order order);
 }

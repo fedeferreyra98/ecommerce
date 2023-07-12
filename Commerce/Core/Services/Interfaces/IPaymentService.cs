@@ -4,9 +4,9 @@ namespace ecommerce.Commerce.Core.Services.Interfaces;
 
 public interface IPaymentService
 {
-    Task<List<Payment>> GetAllPayments();
+    List<Payment> GetAllPayments();
 
-    Task<Payment> GetPaymentById(Guid id);
+    Payment GetPaymentById(Guid id);
 
-    Task InsertPayment(Guid orderId, Guid userId, string paymentMethod);
+    void InsertPayment(Guid orderId, Guid userId, string paymentMethod);
 }

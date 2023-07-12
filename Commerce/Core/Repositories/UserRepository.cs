@@ -14,25 +14,25 @@ public class UserRepository: IUserRepository
         _dbContext = dbContext;
     }
 
-    public async Task<List<User>> GetAll()
+    public List<User> GetAll()
     {
-        return await _dbContext.User.ToListAsync();
+        return _dbContext.User.ToList();
     }
 
-    public async Task<User> GetById(Guid id)
+    public User GetById(Guid id)
     {
-        return await _dbContext.User.Where(x => x.Id == id).FirstAsync();
+        return _dbContext.User.First(x => x.Id == id);
     }
 
-    public async Task Insert(User user)
+    public void Insert(User user)
     {
-        await _dbContext.User.AddAsync(user);
-        await _dbContext.SaveChangesAsync();
+        _dbContext.User.Add(user);
+        _dbContext.SaveChanges();
     }
 
-    public async Task Update(User userUpdated)
+    public void Update(User userUpdated)
     {
-        var user = await _dbContext.User.FindAsync(userUpdated.Id);
+        var user = _dbContext.User.Find(userUpdated.Id);
         
         if (user != null)
         {
@@ -40,14 +40,14 @@ public class UserRepository: IUserRepository
             user.LastName = userUpdated.LastName;
             user.Name = userUpdated.Name;
         }
-        await _dbContext.SaveChangesAsync();
+        _dbContext.SaveChanges();
     }
 
-    public async Task Delete(Guid id)
+    public void Delete(Guid id)
     {
-        var user = await _dbContext.User.FindAsync(id);
+        var user = _dbContext.User.Find(id);
 
         if (user != null) _dbContext.User.Remove(user);
-        await _dbContext.SaveChangesAsync();
+        _dbContext.SaveChanges();
     }
 }

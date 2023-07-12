@@ -16,27 +16,27 @@ public class PaymentService : IPaymentService
         _userService = userService;
         _orderService = orderService;
     }
-    public async Task<List<Payment>> GetAllPayments()
+    public List<Payment> GetAllPayments()
     {
-        return await _paymentRepository.GetAll();
+        return _paymentRepository.GetAll();
     }
 
-    public async Task<Payment> GetPaymentById(Guid id)
+    public Payment GetPaymentById(Guid id)
     {
-        var payment = await _paymentRepository.GetById(id);
+        var payment = _paymentRepository.GetById(id);
 
         if (payment is null) throw new ApplicationException("El pago no existe");
        
         return payment;
     }
 
-    public async Task InsertPayment(Guid orderId, Guid userId, string paymentMethod)
+    public void InsertPayment(Guid orderId, Guid userId, string paymentMethod)
     {
-        var order = await _orderService.GetOrderById(orderId);
+        var order = _orderService.GetOrderById(orderId);
         order.OrderStatus = true;
-        await _orderService.ChangeStatus(order);
+        _orderService.ChangeStatus(order);
       
-        var user = await _userService.GetUserById(userId);
+        var user = _userService.GetUserById(userId);
 
         Payment newPayment = new()
         {
@@ -47,6 +47,6 @@ public class PaymentService : IPaymentService
             FinalPrice = order.FinalPrice
         };
 
-        await _paymentRepository.Insert(newPayment);
+        _paymentRepository.Insert(newPayment);
     }
 }

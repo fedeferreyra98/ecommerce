@@ -20,23 +20,23 @@ public class OrderService : IOrderService
         _userService = userService;
         _catalogService = catalogService;
     }
-    public async Task<List<Order>> GetAllOrders()
+    public List<Order> GetAllOrders()
     {
-        return await _orderRepository.GetAll();
+        return _orderRepository.GetAll();
     }
 
-    public async Task<Order> GetOrderById(Guid id)
+    public Order GetOrderById(Guid id)
     {
-        var order = await _orderRepository.GetById(id);
+        var order = _orderRepository.GetById(id);
 
         if (order is null) throw new ApplicationException("El pedido no existe.");
 
         return order;
     }
 
-    public async Task InsertOrder(OrderDTO order)
+    public void InsertOrder(OrderDTO order)
     {
-        var user = await _userService.GetUserById(order.UserId);
+        var user = _userService.GetUserById(order.UserId);
         var orderPrice = 0m;
         var cartProducts = new List<ProductCart>();
 
@@ -45,9 +45,9 @@ public class OrderService : IOrderService
         foreach (var productOrdered in order.Products)
         {
             var productCatalog = _catalogService.GetProductCatalogById(productOrdered.ProductCatalogId);
-            var productInStock = await _productRepository.GetById(productCatalog.ProductId);
+            var productInStock = _productRepository.GetById(productCatalog.ProductId);
             productInStock.Stock -= productOrdered.Quantity;
-            await _productRepository.Update(productInStock);
+            _productRepository.Update(productInStock);
             
             //Add the products
             cartProducts.Add(new ProductCart(){ProductCatalog = productCatalog, Quantity = productOrdered.Quantity});
@@ -65,33 +65,33 @@ public class OrderService : IOrderService
             TimeStamp = DateTime.Now
         };
 
-        await _orderRepository.Insert(newOrder);
+        _orderRepository.Insert(newOrder);
     }
 
-    private async void VerifyStock(OrderDTO order)
+    private void VerifyStock(OrderDTO order)
     {
         foreach (var productOrdered in order.Products)
         {
             var productCatalog = _catalogService.GetProductCatalogById(productOrdered.ProductCatalogId);
-            var productInStock = await _productRepository.GetById(productCatalog.ProductId);
+            var productInStock = _productRepository.GetById(productCatalog.ProductId);
 
             if (productInStock.Stock < productOrdered.Quantity)
                 throw new ApplicationException("No hay stock suficiente");
         }
     }
 
-    public async Task DeleteOrder(Guid id)
+    public void DeleteOrder(Guid id)
     {
-        await _orderRepository.Delete(id);
+        _orderRepository.Delete(id);
     }
 
-    public async Task<List<Order>> GetOrderByStatus(bool status)
+    public List<Order> GetOrderByStatus(bool status)
     { 
-        return await _orderRepository.GetAllByStatus(status);
+        return _orderRepository.GetAllByStatus(status);
     }
 
-    public async Task ChangeStatus(Order order)
+    public void ChangeStatus(Order order)
     {
-        await _orderRepository.Update(order);
+        _orderRepository.Update(order);
     }
 }

@@ -4,13 +4,13 @@ namespace ecommerce.Commerce.Core.Repositories.Interfaces;
 
 public interface IProductRepository
 {
-    Task<List<Product>> GetAll();
+    List<Product> GetAll();
 
-    Task<Product> GetById(Guid id);
+    Product GetById(Guid id);
 
-    Task Insert(Product product);
+    void Insert(Product product);
 
-    Task Update(Product product);
+    void Update(Product product);
 
-    Task Delete(Guid product);
+    void Delete(Guid product);
 }

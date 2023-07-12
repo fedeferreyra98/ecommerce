@@ -4,15 +4,15 @@ namespace ecommerce.Commerce.Core.Repositories.Interfaces;
 
 public interface IOrderRepository
 {
-    Task<List<Order>> GetAll();
+    List<Order> GetAll();
 
-    Task<Order> GetById(Guid id);
+    Order GetById(Guid id);
 
-    Task Insert(Order order);
+    void Insert(Order order);
 
-    Task Update(Order order);
+    void Update(Order order);
 
-    Task Delete(Guid id);
+    void Delete(Guid id);
     
-    Task<List<Order>> GetAllByStatus(bool status);
+    List<Order> GetAllByStatus(bool status);
 }

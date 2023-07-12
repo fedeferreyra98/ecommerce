@@ -5,13 +5,13 @@ namespace ecommerce.Commerce.Core.Services.Interfaces;
 
 public interface IUserService
 {
-    Task<List<User>> GetAllUsers();
+    List<User> GetAllUsers();
 
-    Task<User> GetUserById(Guid id);
+    User GetUserById(Guid id);
 
-    Task InsertUser(UserDTO userDTO);
+    void InsertUser(UserDTO userDTO);
 
-    Task UpdateUser(User user);
+    void UpdateUser(User user);
 
-    Task DeleteUser(Guid id);
+    void DeleteUser(Guid id);
 }

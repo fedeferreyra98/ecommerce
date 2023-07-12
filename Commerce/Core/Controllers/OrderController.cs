@@ -12,30 +12,30 @@ public class OrderController
     {
         _orderService = orderService;
     }
-    public async Task<Order> GetById(Guid id)
+    public Order GetById(Guid id)
     {
-        return await _orderService.GetOrderById(id);
+        return _orderService.GetOrderById(id);
     }
 
-    public async Task<List<Order>> GetAllOrders()
+    public List<Order> GetAllOrders()
     {
-        return await _orderService.GetAllOrders();
+        return _orderService.GetAllOrders();
     }
 
-    public async Task<List<Order>> GetOrderByStatus(bool status)
+    public List<Order> GetOrderByStatus(bool status)
     {
-        return await _orderService.GetOrderByStatus(status);
+        return _orderService.GetOrderByStatus(status);
     }
 
-    public async void CreateOrder(OrderDTO order)
+    public void CreateOrder(OrderDTO order)
     {
-        await _orderService.InsertOrder(order); 
+        _orderService.InsertOrder(order); 
         Console.WriteLine("Orden creada con exito!");
     }
 
-    public async void DeleteOrder(Guid id)
+    public void DeleteOrder(Guid id)
     {
-        await _orderService.DeleteOrder(id);
+        _orderService.DeleteOrder(id);
         Console.WriteLine("Orden eliminada con exito!");
     }
     

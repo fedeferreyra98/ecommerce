@@ -5,13 +5,13 @@ namespace ecommerce.Commerce.Core.Repositories.Interfaces;
 
 public interface IUserRepository
 {
-    Task<List<User>> GetAll();
+    List<User> GetAll();
 
-    Task<User> GetById(Guid id);
+    User GetById(Guid id);
 
-    Task Insert(User user);
+    void Insert(User user);
+    
+    void Update(User user);
 
-    Task Update(User user);
-
-    Task Delete(Guid id);
+    void Delete(Guid id);
 }

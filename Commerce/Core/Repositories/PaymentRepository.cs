@@ -15,19 +15,19 @@ public class PaymentRepository : IPaymentRepository
     {
         _dbContext = dbContext;
     }
-    public async Task<List<Payment>> GetAll()
+    public List<Payment> GetAll()
     {
-        return await _dbContext.Payment.ToListAsync();
+        return _dbContext.Payment.ToList();
     }
 
-    public async Task<Payment> GetById(Guid id)
+    public Payment GetById(Guid id)
     {
-        return await _dbContext.Payment.Where(x => x.PaymentId == id).FirstAsync();
+        return _dbContext.Payment.First(x => x.PaymentId == id);
     }
 
-    public async Task Insert(Payment newPayment)
+    public void Insert(Payment newPayment)
     {
-        await _dbContext.Payment.AddAsync(newPayment);
-        await _dbContext.SaveChangesAsync();
+        _dbContext.Payment.Add(newPayment);
+        _dbContext.SaveChanges();
     }
 }

@@ -14,54 +14,54 @@ public class OrderRepository : IOrderRepository
     {
         _mongoConnection = mongoConnection;
     }
-    public async Task<List<Order>> GetAll()
+    public List<Order> GetAll()
     {
-        return (await _mongoConnection.GetConnection()
+        return (_mongoConnection.GetConnection()
                 .GetCollection<Order>("Orders")
-                .FindAsync(new BsonDocument()))
+                .Find(new BsonDocument()))
             .ToList();
     }
 
-    public async Task<Order> GetById(Guid id)
+    public Order GetById(Guid id)
     {
         var filter = Builders<Order>.Filter.Eq(x => x.OrderId, id);
 
-        return await _mongoConnection.GetConnection()
+        return _mongoConnection.GetConnection()
             .GetCollection<Order>("Orders")
-            .Find(filter).SingleAsync();
+            .Find(filter).Single();
     }
 
-    public async Task Insert(Order order)
+    public void Insert(Order order)
     {
-        await _mongoConnection.GetConnection()
+        _mongoConnection.GetConnection()
             .GetCollection<Order>("Orders")
-            .InsertOneAsync(order);
+            .InsertOne(order);
     }
 
-    public async Task Update(Order order)
+    public void Update(Order order)
     {
         var filter = Builders<Order>.Filter.Eq(x => x.OrderId, order.OrderId);
 
-        await _mongoConnection.GetConnection()
+        _mongoConnection.GetConnection()
             .GetCollection<Order>("Orders")
-            .ReplaceOneAsync(filter, order);
+            .ReplaceOne(filter, order);
     }
 
-    public async Task Delete(Guid id)
+    public void Delete(Guid id)
     {
         var filter = Builders<Order>.Filter.Eq(x => x.OrderId, id);
 
-        await _mongoConnection.GetConnection()
+        _mongoConnection.GetConnection()
             .GetCollection<Order>("Orders")
-            .DeleteManyAsync(filter);
+            .DeleteMany(filter);
     }
 
-    public async Task<List<Order>> GetAllByStatus(bool status)
+    public List<Order> GetAllByStatus(bool status)
     {
         var filter = Builders<Order>.Filter.Eq(x => x.OrderStatus, status);
 
-        return await _mongoConnection.GetConnection()
+        return _mongoConnection.GetConnection()
             .GetCollection<Order>("Orders")
-            .Find(filter).ToListAsync();
+            .Find(filter).ToList();
     }
 }

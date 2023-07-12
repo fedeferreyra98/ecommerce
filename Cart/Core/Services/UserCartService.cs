@@ -1,10 +1,7 @@
-using System.Net.Mime;
-using System.Text;
 using ecommerce.Cart.Core.Dtos;
 using ecommerce.Cart.Core.Repositories.Interfaces;
 using ecommerce.Cart.Core.Services.Interfaces;
 using ecommerce.Commerce.Core.DTOs;
-using ecommerce.Commerce.Core.Repositories.Interfaces;
 using ecommerce.Commerce.Core.Services.Interfaces;
 using ProductCartDTO = ecommerce.Commerce.Core.DTOs.ProductCartDTO;
 
@@ -20,29 +17,29 @@ public class UserCartService : IUserCartService
         _userCartRepository = userCartRepository;
         _orderService = orderService;
     }
-    public async Task<UserCartDTO?> GetUserCartAsync(Guid userId)
+    public UserCartDTO GetUserCart(Guid userId)
     {
-        return await _userCartRepository.GetUserCartAsync(userId);
+        return _userCartRepository.GetUserCart(userId);
     }
 
-    public async Task<List<UserActivityDTO>> GetUserActivityAsync(Guid userId)
+    public List<UserActivityDTO> GetUserActivity(Guid userId)
     {
-        return await _userCartRepository.GetUserActivityAsync(userId);
+        return _userCartRepository.GetUserActivity(userId);
     }
 
-    public async Task<Guid> ChangeUserCart(UserCartDTO userCartInfo)
+    public Guid ChangeUserCart(UserCartDTO userCartInfo)
     {
-        return await _userCartRepository.ChangeUserCartAsync(userCartInfo);
+        return _userCartRepository.ChangeUserCart(userCartInfo);
     }
 
-    public async Task RestoreCart(Guid userId, Guid logId)
+    public void RestoreCart(Guid userId, Guid logId)
     {
-        await _userCartRepository.RestoreCart(userId, logId);
+        _userCartRepository.RestoreCart(userId, logId);
     }
 
-    public async Task Checkout(Guid userId)
+    public void Checkout(Guid userId)
     {
-        var checkoutInfo = await _userCartRepository.GetUserCartAsync(userId);
+        var checkoutInfo = _userCartRepository.GetUserCart(userId);
         if (checkoutInfo == null)
             throw new Exception("Empty cart");
 
@@ -59,7 +56,7 @@ public class UserCartService : IUserCartService
             IVA = true
         };
 
-        await _orderService.InsertOrder(order);
-        await _userCartRepository.EmptyCart(userId);
+        _orderService.InsertOrder(order);
+        _userCartRepository.EmptyCart(userId);
     }
 }

@@ -13,17 +13,17 @@ public class UserService : IUserService
     {
         _userRepository = userRepository;
     }
-    public async Task<List<User>> GetAllUsers()
+    public List<User> GetAllUsers()
     {
-        return await _userRepository.GetAll();
+        return _userRepository.GetAll();
     }
 
-    public async Task<User> GetUserById(Guid id)
+    public User GetUserById(Guid id)
     {
-        return await _userRepository.GetById(id);
+        return _userRepository.GetById(id);
     }
 
-    public async Task InsertUser(UserDTO userDto)
+    public void InsertUser(UserDTO userDto)
     {
         var user = new User()
         {
@@ -31,16 +31,16 @@ public class UserService : IUserService
             LastName = userDto.LastName,
             Address = userDto.Address
         };
-        await _userRepository.Insert(user);
+        _userRepository.Insert(user);
     }
 
-    public async Task UpdateUser(User user)
+    public void UpdateUser(User user)
     {
-        await _userRepository.Update(user);
+        _userRepository.Update(user);
     }
 
-    public async Task DeleteUser(Guid id)
+    public void DeleteUser(Guid id)
     {
-        await _userRepository.Delete(id);
+        _userRepository.Delete(id);
     }
 }

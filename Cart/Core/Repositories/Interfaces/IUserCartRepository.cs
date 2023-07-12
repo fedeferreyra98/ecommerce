@@ -4,13 +4,13 @@ namespace ecommerce.Cart.Core.Repositories.Interfaces;
 
 public interface IUserCartRepository
 {
-    Task<Guid> ChangeUserCartAsync(UserCartDTO userCartInfo);
+    Guid ChangeUserCart(UserCartDTO userCartInfo);
 
-    Task<List<UserActivityDTO>> GetUserActivityAsync(Guid userId);
+    List<UserActivityDTO> GetUserActivity(Guid userId);
 
-    Task<UserCartDTO?> GetUserCartAsync(Guid userId);
+    UserCartDTO GetUserCart(Guid userId);
 
-    Task RestoreCart(Guid userId, Guid logId);
+    void RestoreCart(Guid userId, Guid logId);
 
-    Task EmptyCart(Guid userId);
+    void EmptyCart(Guid userId);
 }

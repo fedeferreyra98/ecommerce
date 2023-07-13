@@ -16,12 +16,13 @@ using ecommerce.DatabaseContext.Context;
 using ecommerce.DatabaseContext.Context.Interface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using MongoDB.Driver;
 using StackExchange.Redis;
 using ProductCartDTO = ecommerce.Cart.Core.Dtos.ProductCartDTO;
 using UserDTO = ecommerce.Commerce.Core.DTOs.UserDTO;
+// ReSharper disable StringLiteralTypo
+// ReSharper disable CommentTypo
+// ReSharper disable IdentifierTypo
 
 namespace ecommerce;
 
@@ -29,8 +30,9 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        const string connectionString = "server=localhost;port=3306;database=Ecommerce;userid=appuser;pwd=uade1234;";
         var serviceProvider = new ServiceCollection()
-            .AddDbContext<EfContext>(options => options.UseSqlServer("Server=localhost,1433;Database=Ecommerce;User Id=sa;Password=Uade1234;")) //Setup databases
+            .AddDbContext<MySqlContext>(options => options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0,33)))) //Setup databases
             .AddTransient<IConnection<ISession>, CassandraDataContext>()
             .AddTransient<IConnection<IMongoDatabase>,MongoDataContext>()
             .AddTransient<IConnection<IDatabase>, RedisDataContext>()
@@ -72,12 +74,14 @@ public class Program
         const string tarjetaCredito = "Tarjeta de Credito";
         const string tarjetaDebito = "Tarjeta de Debito";
         
-        static Dictionary<int,string> getPaymentMethods()
+        static Dictionary<int,string> GetPaymentMethods()
         {
-            var paymentMethods = new Dictionary<int, string>();
-            paymentMethods.Add(1,tarjetaCredito);
-            paymentMethods.Add(2,tarjetaDebito);
-            paymentMethods.Add(3,transferencia);
+            var paymentMethods = new Dictionary<int, string>
+            {
+                { 1, tarjetaCredito },
+                { 2, tarjetaDebito },
+                { 3, transferencia }
+            };
             return paymentMethods;
         }
         var productOneDto = new ProductDTO
@@ -141,12 +145,32 @@ public class Program
         
         //Logica del programa
 
-        Console.WriteLine("Bienvenido al ecommerce [grupo]^3");
+        Console.WriteLine("Bienvenido al ecommerce Grupo 3");
         
-        // 1. Crear los usuarios
-        userController.Create(userOneDto);
-        userController.Create(userTwoDto);
+        // 1. Crear los usuarios (Correr una sola vez y luego comentar)
+        
+        // userController.Create(userOneDto);
+        // userController.Create(userTwoDto);
+        
+        //Referencia para tener los usuarios registrados
         var usersRegistered = userController.GetAll();
+        
+        //Creo los carritos de compra de cada uno (Correr una sola vez y luego comentar)
+        
+        /* foreach (var userCartDto in usersRegistered.Select(user => new UserCartDTO()
+                 {
+                     Products = new List<ProductCartDTO>(),
+                     User = new Cart.Core.Dtos.UserDTO()
+                     {
+                         Name = user.Name,
+                         LastName = user.LastName,
+                         Adress = user.Address,
+                         UserId = user.Id
+                     }
+                 }))
+        {
+            cartController.Create(userCartDto);
+        } */
         
         Console.WriteLine();
         // 2. Logging
@@ -528,7 +552,7 @@ public class Program
         // 27. realizarPago();
         Console.WriteLine("Metodos de pago disponibles:");
         var input = 0;
-        var paymentMethods = getPaymentMethods();
+        var paymentMethods = GetPaymentMethods();
         Console.WriteLine($"1. {tarjetaCredito}");
         Console.WriteLine($"2. {tarjetaDebito}");
         Console.WriteLine($"3. {transferencia}");

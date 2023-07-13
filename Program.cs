@@ -157,7 +157,7 @@ public class Program
         
         //Creo los carritos de compra de cada uno (Correr una sola vez y luego comentar)
         
-        /* foreach (var userCartDto in usersRegistered.Select(user => new UserCartDTO()
+        foreach (var userCartDto in usersRegistered.Select(user => new UserCartDTO()
                  {
                      Products = new List<ProductCartDTO>(),
                      User = new Cart.Core.Dtos.UserDTO()
@@ -170,7 +170,7 @@ public class Program
                  }))
         {
             cartController.Create(userCartDto);
-        } */
+        } 
         
         Console.WriteLine();
         // 2. Logging
@@ -357,7 +357,7 @@ public class Program
                 Console.WriteLine("clave incorrecta, por favor intente nuevamente.");
             }
 
-        } while (password != "password123");
+        } while (password != username);
         
         // 12."Usuario loggeado correctamente"
         Console.WriteLine("Usuario logueado correctamente!");
@@ -561,11 +561,11 @@ public class Program
         do
         {
             Console.WriteLine("Elija su metodo de pago ingresando el numero correspondiente:");
-            username = Console.ReadLine();
+            var userInput = Console.ReadLine();
 
-            if (usersRegistered.All(x => x.Name != username))
+            if (!int.TryParse(userInput, out input) || !paymentMethods.ContainsKey(input))
             {
-                Console.WriteLine("El usuario no existe, por favor intente nuevamente");
+                Console.WriteLine("El metodo de pago elegido no existe, por favor intente nuevamente");
             }
         } while (!paymentMethods.ContainsKey(input));
         
@@ -603,12 +603,7 @@ public class Program
         Console.WriteLine($"Direccion de envio: {payment.User.Address}");
         Console.WriteLine("---------------------------------");
     }
-
-    private static async void RestoreCart(UserCartController cartController, Stack<Guid> logCart, Guid loggedUserId)
-    {
-        
-    }
-
+    
     private static void Print(UserCartDTO cart)
     {   
         Console.WriteLine("---------------------------------");

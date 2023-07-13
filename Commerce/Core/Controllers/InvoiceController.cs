@@ -29,7 +29,7 @@ public class InvoiceController
         var order = _orderService.GetOrderById(orderId);
         var invoice = new Invoice()
         {
-            User = userId,
+            UserId = userId,
             OrderId = orderId,
             Date = DateTime.Now,
             Iva = order.IVA,

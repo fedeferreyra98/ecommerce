@@ -35,7 +35,7 @@ public class InvoiceRepository : IInvoiceRepository
         
         if (invoice != null)
         {
-            invoice.User = invoiceUpdated.User;
+            invoice.UserId = invoiceUpdated.UserId;
             invoice.Date = invoiceUpdated.Date;
             invoice.Iva = invoiceUpdated.Iva;
             invoice.Price = invoiceUpdated.Price;

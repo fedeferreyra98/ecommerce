@@ -6,9 +6,9 @@ namespace ecommerce.Commerce.Core.Repositories;
 
 public class InvoiceRepository : IInvoiceRepository
 {
-    private readonly EfContext _dbContext;
+    private readonly MySqlContext _dbContext;
 
-    public InvoiceRepository(EfContext dbContext)
+    public InvoiceRepository(MySqlContext dbContext)
     {
         _dbContext = dbContext;
     }

@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore;
 namespace ecommerce.Commerce.Core.Repositories;
 public class UserRepository: IUserRepository
 {
-    private readonly EfContext _dbContext;
+    private readonly MySqlContext _dbContext;
 
-    public UserRepository(EfContext dbContext)
+    public UserRepository(MySqlContext dbContext)
     {
         _dbContext = dbContext;
     }

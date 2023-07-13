@@ -9,9 +9,9 @@ namespace ecommerce.Commerce.Core.Repositories;
 
 public class PaymentRepository : IPaymentRepository
 {
-    private readonly EfContext _dbContext;
+    private readonly MySqlContext _dbContext;
 
-    public PaymentRepository(EfContext dbContext)
+    public PaymentRepository(MySqlContext dbContext)
     {
         _dbContext = dbContext;
     }

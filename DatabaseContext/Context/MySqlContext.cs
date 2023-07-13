@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ecommerce.DatabaseContext.Context;
 
-public class EfContext : DbContext
+public class MySqlContext : DbContext
 {
-    public EfContext(DbContextOptions<EfContext> options) : base(options)
+    public MySqlContext(DbContextOptions<MySqlContext> options) : base(options)
     {
     }
     public DbSet<User> User { get; set; }

@@ -1,5 +1,7 @@
+using System.ComponentModel.DataAnnotations.Schema;
 namespace ecommerce.Commerce.Core.Models;
 
+[Table("Payments")]
 public class Payment
 {
     public Guid PaymentId { get; set; } = Guid.NewGuid();

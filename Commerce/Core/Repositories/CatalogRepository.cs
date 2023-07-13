@@ -36,7 +36,7 @@ public class CatalogRepository : ICatalogRepository
 
     public List<ProductCatalog> GetLogByProductId(Guid productId)
     {
-        var query = _cassandraConnection.GetConnection().Execute($@"SELECT * FROM catalog WHERE productId = {productId}");
+        var query = _cassandraConnection.GetConnection().Execute($@"SELECT * FROM catalog WHERE productId = {productId} ALLOW FILTERING");
 
         var log = query.Select(row => new ProductCatalog(row)).ToList();
 
@@ -47,7 +47,7 @@ public class CatalogRepository : ICatalogRepository
     {
         _mongoConnection.GetConnection()
             .GetCollection<ProductCatalog>("ProductCatalogs")
-            .InsertOneAsync(product);
+            .InsertOne(product);
     }
 
     public void InsertProductLog(ProductCatalog product)
@@ -66,13 +66,13 @@ public class CatalogRepository : ICatalogRepository
 
         _mongoConnection.GetConnection()
             .GetCollection<ProductCatalog>("ProductCatalogs")
-            .ReplaceOneAsync(filter, product);
+            .ReplaceOne(filter, product);
     }
 
     public void Delete(Guid id)
     {
         var filter = Builders<ProductCatalog>.Filter.Eq(x => x.Id, id);
 
-        _mongoConnection.GetConnection().GetCollection<ProductCatalog>("ProductCatalogs").DeleteManyAsync(filter);
+        _mongoConnection.GetConnection().GetCollection<ProductCatalog>("ProductCatalogs").DeleteMany(filter);
     }
 }

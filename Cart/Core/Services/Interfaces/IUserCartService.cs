@@ -4,7 +4,6 @@ namespace ecommerce.Cart.Core.Services.Interfaces;
 
 public interface IUserCartService
 {
-    
     UserCartDTO GetUserCart(Guid userId);
 
     List<UserActivityDTO> GetUserActivity(Guid userId);
@@ -14,4 +13,5 @@ public interface IUserCartService
     void RestoreCart(Guid userId, Guid logId);
 
     void Checkout(Guid userId);
+    void CreateCart(UserCartDTO userCartDto);
 }

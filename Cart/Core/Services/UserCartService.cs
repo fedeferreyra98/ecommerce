@@ -59,4 +59,9 @@ public class UserCartService : IUserCartService
         _orderService.InsertOrder(order);
         _userCartRepository.EmptyCart(userId);
     }
+
+    public void CreateCart(UserCartDTO userCartDto)
+    {
+        _userCartRepository.CreateCart(userCartDto);
+    }
 }

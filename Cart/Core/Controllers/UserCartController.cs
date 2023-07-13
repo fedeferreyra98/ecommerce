@@ -36,4 +36,9 @@ public class UserCartController
     {
         _userCartService.Checkout(userId);
     }
+
+    public void Create(UserCartDTO userCartDto)
+    {
+        _userCartService.CreateCart(userCartDto);
+    }
 }

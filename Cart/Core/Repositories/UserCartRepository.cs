@@ -81,6 +81,19 @@ public class UserCartRepository : IUserCartRepository
             return result;
         }
 
+        public void CreateCart(UserCartDTO userCartDto)
+        {
+            var userId = userCartDto.User.UserId;
+
+            // Create or update the user details in Redis
+            _redisConnection.GetConnection()
+                .HashSet($"user:{userId}", userCartDto.User.ToHashEntries());
+
+            // Create an empty set for the user's cart
+            _redisConnection.GetConnection()
+                .SetAdd($"userCart:{userId}", Array.Empty<RedisValue>());
+        }
+
         public List<UserActivityDTO> GetUserActivity(Guid userId)
         {
             var query = _cassandraConnection.GetConnection()

@@ -9,6 +9,7 @@ public interface IUserCartRepository
     List<UserActivityDTO> GetUserActivity(Guid userId);
 
     UserCartDTO GetUserCart(Guid userId);
+    void CreateCart(UserCartDTO userCartDto);
 
     void RestoreCart(Guid userId, Guid logId);
 

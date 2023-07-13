@@ -37,7 +37,7 @@ public class OrderService : IOrderService
     public void InsertOrder(OrderDTO order)
     {
         var user = _userService.GetUserById(order.UserId);
-        var orderPrice = 0m;
+        var orderPrice = 0;
         var cartProducts = new List<ProductCart>();
 
         VerifyStock(order);

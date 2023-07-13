@@ -229,10 +229,11 @@ public class Program
         Console.WriteLine("Continua la ejecucion del programa...");
         Console.WriteLine();
         
-        // Se crean productos:
-        productController.Create(productOneDto);
-        productController.Create(productTwoDto);
-        productController.Create(productThreeDto);
+        // Se crean productos (Correr una vez y comentar):
+        
+        // productController.Create(productOneDto);
+        // productController.Create(productTwoDto);
+        // productController.Create(productThreeDto);
         var productsAdded = productController.GetAll();
         
         
@@ -248,7 +249,7 @@ public class Program
             AuthorId = loggedUser.Id,
             ProductId = iphoneProduct.ProductId,
             Moment = DateTime.Now,
-            Price = 999m
+            Price = 999
         });
         
         Console.WriteLine();
@@ -261,7 +262,7 @@ public class Program
             AuthorId = loggedUser.Id,
             ProductId = samsungProduct.ProductId,
             Moment = DateTime.Now,
-            Price = 1250m
+            Price = 1250
         });
         
         Console.WriteLine();
@@ -274,7 +275,7 @@ public class Program
             AuthorId = loggedUser.Id,
             ProductId = cuchilloProduct.ProductId,
             Moment = DateTime.Now,
-            Price = 150m
+            Price = 150
         });
         
         Console.WriteLine();
@@ -305,7 +306,7 @@ public class Program
             AuthorId = loggedUser.Id,
             ProductId = iphoneProduct.ProductId,
             Moment = DateTime.Now,
-            Price = 899m
+            Price = 899
         });
         
         //Actualizo referencia del catalogo e iphone
@@ -351,7 +352,7 @@ public class Program
             Console.Write("Ingrese su clave de acceso: ");
             password = Console.ReadLine();
 
-            if (password != "password123")
+            if (password != username)
             {
                 Console.WriteLine("clave incorrecta, por favor intente nuevamente.");
             }
@@ -392,21 +393,21 @@ public class Program
         {
             ProductCatalogId = iphoneCatalog.Id,
             ImageURL = iphoneProduct.MainImage,
-            Price = (double)iphoneCatalog.Price,
+            Price = iphoneCatalog.Price,
             ProductName = iphoneProduct.ProductName
         };
         var cuchilloCart = new ProductCartDTO()
         {
             ProductName = cuchilloProduct.ProductName,
             ImageURL = cuchilloProduct.MainImage,
-            Price = (double)cuchilloCatalog.Price,
+            Price = cuchilloCatalog.Price,
             ProductCatalogId = cuchilloCatalog.Id
         };
         var samsungCart = new ProductCartDTO()
         {
             ProductName = samsungProduct.ProductName,
             ImageURL = samsungProduct.MainImage,
-            Price = (double)samsungCatalog.Price,
+            Price = samsungCatalog.Price,
             ProductCatalogId = samsungCatalog.Id
         };
         
@@ -450,6 +451,7 @@ public class Program
         UpdateCart(cart, cartController, logCart);
         
         //actualizo referencia de cart
+        
         cart = cartController.GetUserCart(loggedUser.Id);
         
         // PAUSA

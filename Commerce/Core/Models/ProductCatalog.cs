@@ -12,7 +12,7 @@ public class ProductCatalog
     public Guid AuthorId { get; set; }
     public Guid ProductId { get; set; }
     public DateTime Moment { get; set; }
-    public decimal Price { get; set; }
+    public int Price { get; set; }
     public ProductCatalog() {}
 
     public ProductCatalog(Row row)
@@ -21,6 +21,6 @@ public class ProductCatalog
         AuthorId = row.GetValue<Guid>(nameof(AuthorId).ToLower());
         ProductId = row.GetValue<Guid>(nameof(ProductId).ToLower());
         Moment = row.GetValue<DateTime>(nameof(Moment).ToLower());
-        Price = row.GetValue<decimal>(nameof(Price).ToLower());
+        Price = row.GetValue<int>(nameof(Price).ToLower());
     }
 }

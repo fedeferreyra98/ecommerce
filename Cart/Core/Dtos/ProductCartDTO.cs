@@ -13,7 +13,7 @@ public class ProductCartDTO
 
     public int Quantity { get; set; }
 
-    public double Price { get; set; }
+    public int Price { get; set; }
 
     public ProductCartDTO() { }
 
@@ -23,7 +23,7 @@ public class ProductCartDTO
         ProductName = row.GetValue<string>(nameof(ProductName).ToLower());
         ImageURL = row.GetValue<string>(nameof(ImageURL).ToLower());
         Quantity = row.GetValue<int>(nameof(Quantity).ToLower());
-        Price = row.GetValue<double>(nameof(Price).ToLower());
+        Price = row.GetValue<int>(nameof(Price).ToLower());
     }
 
     public HashEntry[] ToHashEntries()
@@ -55,7 +55,7 @@ public class ProductCartDTO
                     Quantity = int.Parse(value);
                     break;
                 case nameof(Price):
-                    Price = double.Parse(value);
+                    Price = int.Parse(value);
                     break;
                 default:
                     break;

@@ -9,6 +9,6 @@ public class Invoice
     public Guid User { get; set; }
     public DateTime Date { get; set; }
     public bool Iva { get; set; }
-    public decimal Price { get; set; }
+    public int Price { get; set; }
     public bool Payed { get; set; }
 }

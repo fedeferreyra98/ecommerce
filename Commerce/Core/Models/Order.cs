@@ -18,5 +18,5 @@ public class Order
 
     public bool OrderStatus { get; set; } = false;
 
-    public decimal FinalPrice { get; set; }
+    public int FinalPrice { get; set; }
 }

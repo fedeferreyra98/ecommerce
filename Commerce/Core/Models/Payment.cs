@@ -9,5 +9,5 @@ public class Payment
     public User User { get; set; }
     public DateTime PaymentDate { get; set; }
     public string PaymentMethod { get; set; }
-    public decimal FinalPrice { get; set; }
+    public int FinalPrice { get; set; }
 }

@@ -12,7 +12,7 @@ public class UserActivityDTO
 
     public string ImageUrl { get; set; }
 
-    public double Price { get;set; }
+    public int Price { get;set; }
 
     public Guid ProductCatalogId { get; set; }
 
@@ -28,7 +28,7 @@ public class UserActivityDTO
         Moment = row.GetValue<DateTime>(nameof(Moment).ToLower());
         UserId = row.GetValue<Guid>(nameof(UserId).ToLower());
         ImageUrl = row.GetValue<string>(nameof(ImageUrl).ToLower());
-        Price = row.GetValue<double>(nameof(Price).ToLower());
+        Price = row.GetValue<int>(nameof(Price).ToLower());
         ProductCatalogId = row.GetValue<Guid>(nameof(ProductCatalogId).ToLower());
         ProductName = row.GetValue<string>(nameof(ProductName).ToLower());
         Quantity = row.GetValue<int>(nameof(Quantity).ToLower());
